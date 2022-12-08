@@ -1,3 +1,10 @@
+$color1:#00bc77;
+$color2-dark:#6458F5;
+$color2-light: #B3B3F0;
+$color3:#12002b;
+$color4:#e0e6ed;
+$color5:#B8C4CE;
+
 html {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -8,17 +15,24 @@ html {
 
 body, #root {
     margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
 .main {
     flex: 1;
 }
 
 .bg-dark {
-    background-color: #12002b;
+    background-color: $color3;//$color3;
+}
+.bg-light {
+    background-color: $color4;
 }
 
 .sr-only {
@@ -37,4 +51,6 @@ body, #root {
     white-space: nowrap !important;
     /* 3 */
 }
-
+.d-none {
+    display: none;
+}

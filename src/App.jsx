@@ -7,9 +7,9 @@ import Router from "./Router";
 const App = () => {
     return (
         <>
-            <Header />
+            
             <Router />
-            <Footer />
+            
         </>
     );
 };
