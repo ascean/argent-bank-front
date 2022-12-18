@@ -1,5 +1,5 @@
 .error {
-    color: red;
+    color:$color1;
     text-align: center;
     height: 78vh;
     display: flex;
@@ -20,24 +20,13 @@
     }
     
     & a {
-        color: red;
+        color: $color1;
         padding-bottom: 60px;
         font-size: 18px;
         text-decoration: underline;
     }
 }
 
-// @media screen and (min-width:768px) {
-//     .error {
-//         & h1 {
-//             font-size:150px;
-//         }
-//         & h2 {
-//             font-size:30px;
-//         }
-        
-//     }
-// }
 @media screen and (min-width:769px) and (max-width:1200px) {
     .error {
         height: 80vh;

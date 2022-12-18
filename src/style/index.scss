@@ -1,10 +1,11 @@
 @import 'settings';
 @import '../pages/home/style/home';
-@import '../pages/signIn/style/signIn';
-@import '../pages/user/style/user';
+@import '../pages/login/style/login';
+@import '../pages/dashboard/style/dashboard';
+@import '../pages/error/style/error';
 @import '../components/footer/style/footer';
 @import '../components/header/style/header';
 @import '../components/feature/style/feature';
 @import '../components/account/style/account';
-@import '../components/connectedUser/style/connectedUser';
+@import '../components/spinner/style/spinner'
 

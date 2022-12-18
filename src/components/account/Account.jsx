@@ -18,7 +18,7 @@ const Account = ({ title, amount, description, editMode = false }) => {
                 <p className="account-amount-description">{description}</p>
             </div>
             <div className="account-content-wrapper cta">
-                <Link to="transactions">
+                <div>
                     <button
                         className={
                             !editMode
@@ -29,7 +29,7 @@ const Account = ({ title, amount, description, editMode = false }) => {
                     >
                         View transactions
                     </button>
-                </Link>
+                </div>
             </div>
         </section>
     );

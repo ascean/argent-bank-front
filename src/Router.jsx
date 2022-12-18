@@ -2,11 +2,13 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Error from "./pages/error/Error";
-import SignIn from "./pages/signIn/SignIn";
-import User from "./pages/user/User";
-import Transactions from "./pages/transactions/Transactions";
+import Dashboard from "./pages/dashboard/Dashboard";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+import Login from "./pages/login/Login";
+import Register from "./pages/login/Register";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 const Router = () => {
     return (
@@ -14,12 +16,13 @@ const Router = () => {
             <Header />
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="sign-in" element={<SignIn />} />
-                <Route path="user" element={<User />} />
-                <Route path="user/transactions" element={<Transactions />} />
+                <Route path="login" element={ <Login /> } />
+                <Route path="register" element={ <Register /> } />
+                <Route path="dashboard" element={<Dashboard />} />
                 <Route path="*" element={<Error />} />
             </Routes>
             <Footer />
+            <ToastContainer/>
         </BrowserRouter>
     );
 };

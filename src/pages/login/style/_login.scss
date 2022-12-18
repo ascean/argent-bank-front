@@ -1,0 +1,123 @@
+.log-button {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    border-color: $color1;
+    background-color: $color1;
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    cursor: pointer;
+
+    a {
+        color: #fff;
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+    }
+
+    &.inactive {
+        border-color: $color5;
+        background-color: $color5;
+    }
+}
+
+.register-content {
+    box-sizing: border-box;
+    background-color: white;
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 3rem;
+    padding: 2rem;
+
+    .error {
+        color: crimson;
+        font-size: 0.7rem;
+        font-style: italic;
+    }
+
+    .errorDatas {
+        margin-top: 10px;
+        margin-bottom: 0px;
+        color: crimson;
+        font-size: 1.5rem;
+    }
+}
+
+
+.input-remember {
+    display: flex;
+
+    label {
+        margin-left: 0.25rem;
+    }
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-bottom: 1rem;
+
+    label {
+        font-weight: bold;
+    }
+
+    input {
+        padding: 5px;
+        font-size: 1.2rem;
+
+        &:focus-visible {
+            outline: 1px solid $color1;
+            border: 1px solid $color1;
+            border-radius: 2px;
+        }
+    }
+}
+
+.instructions {
+    font-size: 0.75rem;
+    border-radius: 2px;
+    background: #000;
+    color: #fff;
+    padding: 0.25rem;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.instructions>svg {
+    margin-right: 0.25rem;
+}
+
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
+
+.hide {
+    display: none;
+}
+
+.valid {
+    color: $color1;
+    margin-left: 0.25rem;
+}
+
+.invalid {
+    color: red;
+    margin-left: 0.25rem;
+}
+
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.inactive {
+    opacity: 0.5;
+}

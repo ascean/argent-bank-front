@@ -1,15 +1,33 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import ConnectedUser from "../connectedUser/ConnectedUser";
-import ProfileIcon from "../profileIcon/ProfileIcon";
-import SignOut from "../signOut/SignOut";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logout, reset } from "../../feature/auth/authSlice";
+import { resetStatus } from "../../feature/edit/editSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faCircleUser,
+    faSignInAlt,
+    faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 /**
  * Component header navigation
  * @returns {ReactElement} Header navigation
  */
 const Header = () => {
-    const user = true;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const user = useSelector((state) => state.auth.user);
+
+    const editMode = useSelector((state) => state.edit.editMode);
+
+    const onLogout = () => {
+        dispatch(logout());
+        dispatch(reset());
+        dispatch(resetStatus())
+        navigate("/");
+    };
+
     return (
         <nav className="main-nav">
             <Link to="/" className="main-nav-logo">
@@ -20,22 +38,38 @@ const Header = () => {
                 />
                 <h1 className="sr-only">Argent Bank</h1>
             </Link>
-            {!user ? (
-                <div>
-                    <Link to="sign-in" className="main-nav-item">
-                        <ProfileIcon />
-                        Sign In
+
+            {user ? (
+                <div className="main-nav-log">
+                    {editMode ? (
+                        <div className="main-nav-item" disabled style={ { "opacity": "0.7" } }>
+                            <FontAwesomeIcon icon={ faCircleUser }  />
+                            <span className="sign-out-label">
+                                {user.firstName}
+                            </span>
+                        </div>
+                    ) : (
+                        <Link to="/dashboard" className="main-nav-item">
+                            <FontAwesomeIcon icon={faCircleUser} />
+                            <span className="sign-out-label">
+                                {user.firstName}
+                            </span>
+                        </Link>
+                    )}
+                    <Link to="/" className="main-nav-item" onClick={onLogout}>
+                        <FontAwesomeIcon icon={faSignOutAlt} />
+                        <span className="sign-out-label">Sign Out</span>
                     </Link>
                 </div>
             ) : (
-                <div className="main-nav-signout">
-                    <Link to="/" className="main-nav-item">
-                        <ConnectedUser />
-                        <span className="sign-out-label">Tony</span>
+                <div className="main-nav-log">
+                    <Link to="login" className="main-nav-item">
+                        <FontAwesomeIcon icon={faCircleUser} />
+                        <span className="sign-out-label">Log In</span>
                     </Link>
-                    <Link to="/" className="main-nav-item">
-                        <SignOut />
-                        <span className="sign-out-label">Sign Out</span>
+                    <Link to="register" className="main-nav-item">
+                        <FontAwesomeIcon icon={faSignInAlt} />
+                        <span className="sign-out-label">Register</span>
                     </Link>
                 </div>
             )}

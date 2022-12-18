@@ -1,10 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import Feature from "../../components/feature/Feature";
+import Spinner from "../../components/spinner/Spinner";
+import { isValidToken } from "../../feature/auth/authServices";
+import { fetchProfile } from "../../feature/auth/authSlice";
 import chatIcon from "./img/icon-chat.png";
 import moneyIcon from "./img/icon-money.png";
 import securityIcon from "./img/icon-security.png";
 
 const Home = () => {
+
+    const dispatch = useDispatch()
+    const { user, isError, isLoading, isSuccess, message } = useSelector(
+        (state) => state.auth
+    );
+
+
+    useEffect(() => {
+        const token = window.localStorage.getItem("token")
+        if (token) {
+            if (isValidToken(token)) {
+                dispatch(fetchProfile())
+                if (isError) {
+                    toast.error("Fetch : "+message);
+                }
+            } else {
+                window.localStorage.removeItem("token")
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ isError, message, dispatch ])
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
     return (
         <main>
             <div className="hero">
