@@ -6,11 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../../components/spinner/Spinner";
-import { login } from "../../feature/auth/authSlice";
-import { reset } from "../../feature/auth/authSlice";
+import { login } from "../../redux/auth/authSlice";
+import { reset } from "../../redux/auth/authSlice";
 
 const Login = () => {
-    const [credentials, setCredentials] = useState({
+
+    const [ credentials, setCredentials ] = useState({
         email: "",
         password: "",
     });
@@ -22,24 +23,17 @@ const Login = () => {
         (state) => state.auth
     );
 
-    const handleChange = (e) => {
-        setCredentials((prevState) => ({
-            ...prevState,
-            [e.target.name]: e.target.value,
-        }));
-    };
-
     useEffect(() => {
         if (isError) toast.error(message);
 
         if (isSuccess || user) {
             switch (user) {
                 case 400:
-                    toast.error("User unknown or incorrect password");
+                    toast.error("Invalid fields");
                     break;
-
-                case 404:
-                    navigate("/error");
+                    
+                case 500:
+                    toast.error("Internal Server Error");
                     break;
 
                 default:
@@ -47,13 +41,23 @@ const Login = () => {
                     break;
             }
         }
-
         dispatch(reset());
-    }, [user, isError, isSuccess, message, dispatch, navigate]);
+
+    }, [ user, isError, isSuccess, message, dispatch, navigate ]);
+
+    const handleChange = (e) => {
+        setCredentials((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const userData = { email, password };
+        const userData = {
+            email:email.trim(),
+            password:password.trim()
+        };
         dispatch(login(userData));
     };
 

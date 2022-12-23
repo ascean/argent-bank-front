@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+//SLICE for edit mode gestion : useful for updating Header component with firstname user 
 const initialState = {
     editMode:false,
 }
@@ -8,13 +9,13 @@ export const editSlice = createSlice({
     name:"edit",
     initialState,
     reducers: {
-        status: (state) => {
+        edit: (state) => {
             state.editMode = true
         },
-        resetStatus: () => initialState
+        noEdit: () => initialState
         
     }
 })
 
-export const {status, resetStatus} = editSlice.actions;
+export const {edit, noEdit} = editSlice.actions;
 export default editSlice.reducer

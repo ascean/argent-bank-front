@@ -1,13 +1,12 @@
 import React from "react";
 
 /**
- * Feature Component
+ * Bank Feature Component on Home page
  * @param {String} icon picture path
  * @param {String} alt img alt attribute
  * @param {String} title
  * @param {String} content 
  * @returns {ReactElement} feature
-
  */
 const Feature = ({ icon, alt, title, content }) => {
 

@@ -33,38 +33,35 @@
 .account-content-wrapper {
     width: 100%;
     flex: 1;
-    
-    
 }
 
-.transaction-button {
-        display: block;
-        width: 100%;
-        padding: 8px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        margin-top: 1rem;
-        border-color:$color1;
-        background-color: $color1;
-        color: #fff;
-        
-        &.edit-mode {
-            border-color:$color2-dark;
-            background-color:$color2-dark;
-            
-        }
+.account-button {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    border-color: $color1;
+    background-color: $color1;
+    color: #fff;
+
+    &.edit-mode {
+        border-color: $color2-dark;
+        background-color: $color2-dark;
     }
-    
-    @media (min-width: 720px) {
-        .account {
-            flex-direction: row;
-        }
-    
-        .account-content-wrapper.cta {
-            flex: 0;
-        }
-    
-        .transaction-button {
-            width: 200px;
-        }
+}
+
+@media (min-width: 720px) {
+    .account {
+        flex-direction: row;
     }
+
+    .account-content-wrapper.cta {
+        flex: 0;
+    }
+
+    .account-button {
+        width: 200px;
+    }
+}

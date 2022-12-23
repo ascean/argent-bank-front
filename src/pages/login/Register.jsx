@@ -10,7 +10,7 @@ import {
     faInfoCircle,
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import { register, reset } from "../../feature/auth/authSlice";
+import { register, reset } from "../../redux/auth/authSlice";
 import Spinner from "../../components/spinner/Spinner";
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-F0-9._-]+\.[a-zA-Z]{2,6}$/;
@@ -19,11 +19,11 @@ const PWD_REGEX = /^[A-z0-9!@#$%]{6,23}$/;
 
 const Register = () => {
     const [credentials, setCredentials] = useState({
-        email: "",
-        password: "",
-        passwordConfirm: "",
-        firstName: "",
-        lastName: "",
+        email: "titi@titi.fr",
+        password: "111111",
+        passwordConfirm: "111111",
+        firstName: "pppp",
+        lastName: "pppp",
     });
 
     const { email, password, passwordConfirm, firstName, lastName } =
@@ -47,27 +47,27 @@ const Register = () => {
     const firstNameRef = useRef();
     const lastNameRef = useRef();
 
-    //check email
     useEffect(() => {
+        //check email
         const result = EMAIL_REGEX.test(email);
         setValidEmail(result);
     }, [email]);
 
-    //check password
     useEffect(() => {
+        //check password format and match passwords
         setValidPassword(PWD_REGEX.test(password));
         const match = password === passwordConfirm;
         setValidMatch(match);
     }, [password, passwordConfirm]);
 
-    //check firstName
     useEffect(() => {
+        //check firstName
         const result = NAME_REGEX.test(firstName);
         setValidFirstName(result);
     }, [firstName]);
 
-    //check lastName
     useEffect(() => {
+        //check lastName
         const result = NAME_REGEX.test(lastName);
         setValidLastName(result);
     }, [lastName]);
@@ -81,8 +81,8 @@ const Register = () => {
                     toast.error("User already exists");
                     break;
 
-                case 404:
-                    navigate("/error");
+                case 500:
+                    toast.error("Internal Server Error");
                     break;
 
                 default:
@@ -102,30 +102,32 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (
-            !validEmail ||
-            !validPassword ||
-            !validMatch ||
-            !validFirstName ||
-            !validLastName
-        ) {
-            if (!validEmail) emailRef.current.focus();
-            if (!validPassword) passwordRef.current.focus();
-            if (!validMatch) passwordConfirmRef.current.focus();
-            if (!validFirstName) firstNameRef.focus();
-            if (!validLastName) lastNameRef.current.focus();
+        if (!validEmail) {
+            console.log("ok");
+            emailRef.current.focus();
+            return;
+        }
+        if (!validPassword) {
+            passwordRef.current.focus();
+            return;
+        }
+        if (!validMatch) {
+            passwordConfirmRef.current.focus();
+            return;
+        }
+        if (!validFirstName) {
+            firstNameRef.focus();
+            return;
+        }
+        if (!validLastName) {
+            lastNameRef.current.focus();
+            return;
+        }
+
+        if (password !== passwordConfirm) {
+            toast.error("Passwords do not match");
         } else {
-            if (password !== passwordConfirm) {
-                toast.error("Passwords do not match");
-            } else {
-                const userData = {
-                    email,
-                    password,
-                    firstName,
-                    lastName,
-                };
-                dispatch(register(userData));
-            }
+            dispatch(register({email, password, firstName, lastName},));
         }
     };
     if (isLoading) {
@@ -299,8 +301,8 @@ const Register = () => {
                                     : "offscreen"
                             }
                         >
-                            <FontAwesomeIcon icon={faInfoCircle} />2 characters
-                            or more
+                            <FontAwesomeIcon icon={faInfoCircle} />must contain 2
+                            letters or more
                         </p>
                     </div>
                     <div className="input-wrapper">
@@ -338,8 +340,8 @@ const Register = () => {
                                     : "offscreen"
                             }
                         >
-                            <FontAwesomeIcon icon={faInfoCircle} />2 characters
-                            or more
+                            <FontAwesomeIcon icon={faInfoCircle} />must contain 2
+                            letters or more
                         </p>
                     </div>
 

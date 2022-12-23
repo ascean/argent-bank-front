@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout, reset } from "../../feature/auth/authSlice";
-import { resetStatus } from "../../feature/edit/editSlice";
+import { logout, reset } from "../../redux/auth/authSlice";
+import { noEdit } from "../../redux/edit/editSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faCircleUser,
@@ -15,6 +15,7 @@ import {
  * @returns {ReactElement} Header navigation
  */
 const Header = () => {
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.user);
@@ -24,7 +25,7 @@ const Header = () => {
     const onLogout = () => {
         dispatch(logout());
         dispatch(reset());
-        dispatch(resetStatus())
+        dispatch(noEdit())
         navigate("/");
     };
 
@@ -44,32 +45,32 @@ const Header = () => {
                     {editMode ? (
                         <div className="main-nav-item" disabled style={ { "opacity": "0.7" } }>
                             <FontAwesomeIcon icon={ faCircleUser }  />
-                            <span className="sign-out-label">
+                            <span className="sign-label">
                                 {user.firstName}
                             </span>
                         </div>
                     ) : (
                         <Link to="/dashboard" className="main-nav-item">
                             <FontAwesomeIcon icon={faCircleUser} />
-                            <span className="sign-out-label">
+                            <span className="sign-label">
                                 {user.firstName}
                             </span>
                         </Link>
                     )}
                     <Link to="/" className="main-nav-item" onClick={onLogout}>
                         <FontAwesomeIcon icon={faSignOutAlt} />
-                        <span className="sign-out-label">Sign Out</span>
+                        <span className="sign-label">Sign Out</span>
                     </Link>
                 </div>
             ) : (
                 <div className="main-nav-log">
                     <Link to="login" className="main-nav-item">
                         <FontAwesomeIcon icon={faCircleUser} />
-                        <span className="sign-out-label">Log In</span>
+                        <span className="sign-label">Log In</span>
                     </Link>
                     <Link to="register" className="main-nav-item">
                         <FontAwesomeIcon icon={faSignInAlt} />
-                        <span className="sign-out-label">Register</span>
+                        <span className="sign-label">Register</span>
                     </Link>
                 </div>
             )}

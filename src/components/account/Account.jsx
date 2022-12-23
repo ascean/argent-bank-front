@@ -1,15 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 /**
- * Display the account page for selected user
+ * Display account items
  * @param {string} title
  * @param {string} amount
  * @param {string} description
  * @param {boolean} editMode
  * @returns {ReactElement} Account
  */
-const Account = ({ title, amount, description, editMode = false }) => {
+const Transaction = ({ title, amount, description, editMode = false }) => {
     return (
         <section className="account">
             <div className="account-content-wrapper">
@@ -22,8 +21,8 @@ const Account = ({ title, amount, description, editMode = false }) => {
                     <button
                         className={
                             !editMode
-                                ? "transaction-button"
-                                : "transaction-button edit-mode"
+                                ? "account-button"
+                                : "account-button edit-mode"
                         }
                         disabled={editMode && "disabled"}
                     >
@@ -35,4 +34,4 @@ const Account = ({ title, amount, description, editMode = false }) => {
     );
 };
 
-export default Account;
+export default Transaction;
