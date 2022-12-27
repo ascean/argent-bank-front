@@ -102,7 +102,7 @@ export async function login (credentials) {
 }
 
 /**
- * Remove token fromthe localStorage when log out
+ * Remove token from localStorage when log out
  */
 const logout = () => {
     localStorage.removeItem("token");

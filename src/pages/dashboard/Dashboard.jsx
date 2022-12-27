@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import Account from "../../components/account/Account";
 import Spinner from "../../components/spinner/Spinner";
 import { isValidToken } from "../../interceptors/authReqInterceptor";
-import { updateProfile } from "../../redux/auth/authSlice";
+import { reset, updateProfile } from "../../redux/auth/authSlice";
 import { fetchProfile } from "../../redux/auth/authSlice";
 import { edit, noEdit } from "../../redux/edit/editSlice";
 
@@ -60,7 +60,7 @@ const Dashboard = () => {
             // }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSuccess, isError, message, dispatch, navigate]);
+    }, [user, isSuccess, isError, message, dispatch, navigate]);
 
     //EDIT NAME : CLIC ON EDIT NAME BUTTON
     const handleEdit = () => {
@@ -103,6 +103,7 @@ const Dashboard = () => {
 
                     case 401:
                         localStorage.removeItem("token");
+                        dispatch(reset())
                         navigate("/login");
                         break;
 

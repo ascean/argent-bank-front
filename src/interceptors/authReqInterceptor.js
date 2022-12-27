@@ -14,7 +14,7 @@ export const isValidToken = (token) => {
     if (Date.now() <= decoded.exp * 1000) {
         return true;
     }
-    
+    localStorage.removeItem("token")
     return false;
 };
 

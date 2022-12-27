@@ -117,7 +117,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transactions Module
       summary: Current month accounts
       description: API for accounts list in current month
       parameters:
@@ -158,7 +158,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transactions Module
       summary: Transactions of specific account
       description: API for transactions list of specific account
       parameters:
@@ -197,7 +197,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transactions Module
       summary: Update category in transaction
       description: API for updating category in a transaction
       parameters:
@@ -250,7 +250,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transactions Module
       summary: delete category in transaction
       description: API for deleting category in a transaction
       parameters:
@@ -294,7 +294,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transactions Module
       summary: Update transaction type
       description: API for updating transaction type
       parameters:
@@ -347,7 +347,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transactions Module
       summary: delete type in transaction
       description: API for deleting type in a transaction
       parameters:
@@ -391,7 +391,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transactions Module
       summary: Update transaction notes
       description: API for updating transaction notes
       parameters:
@@ -444,7 +444,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transactions Module
       summary: delete notes in transaction
       description: API for deleting notes in a transaction
       parameters:
@@ -468,6 +468,291 @@ paths:
           type: string
           description: transaction id
           required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction notes deleted successfully
+          schema:
+             $ref: '#/definitions/NotesDeleteResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Specified resource was not found 
+        '500':
+          description: Internal Server Error          
+          
+  /user/accounts/month:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module in body
+      summary: Current month accounts
+      description: API for accounts list in current month
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: userId
+          description: user id
+          required: true
+          schema:
+            $ref: '#/definitions/Account'
+        - in: query
+          name: month
+          description: month from 1 to  12
+          required: true
+          type: number
+          minimum: 1
+          maximum: 12
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          schema:
+             $ref: '#/definitions/AccountResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Specified resource was not found 
+        '500':
+          description: Internal Server Error
+  /user/accounts/account/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module in body
+      summary: Transactions of specific account
+      description: API for transactions list of specific account
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: userId
+          description: Transaction Payload
+          required: true
+          schema: 
+            $ref: '#/definitions/Transaction'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          schema:
+             $ref: '#/definitions/TransactionResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Specified resource was not found 
+        '500':
+          description: Internal Server Error
+  /user/accounts/account/transactions/transaction/category:
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module in body
+      summary: Update category in transaction
+      description: API for updating category in a transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Category Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Category'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction category updated successfully
+          schema:
+             $ref: '#/definitions/TransactionResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Specified resource was not found 
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module in body
+      summary: delete category in transaction
+      description: API for deleting category in a transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Category Payload
+          required: true
+          schema:
+            $ref: '#/definitions/InfosDelete'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction category deleted successfully
+          schema:
+             $ref: '#/definitions/CategoryDeleteResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Specified resource was not found 
+        '500':
+          description: Internal Server Error          
+  /user/accounts/account/transactions/transaction/type:
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module in body
+      summary: Update transaction type
+      description: API for updating transaction type
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Transaction Type Payload
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionType'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction category updated successfully
+          schema:
+             $ref: '#/definitions/TransactionResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Specified resource was not found 
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module in body
+      summary: delete type in transaction
+      description: API for deleting type in a transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Transaction Type Payload
+          required: true
+          schema:
+            $ref: '#/definitions/InfosDelete'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction type deleted successfully
+          schema:
+             $ref: '#/definitions/TypeDeleteResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Specified resource was not found 
+        '500':
+          description: Internal Server Error          
+  /user/accounts/account/transactions/transaction/notes:
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module in body
+      summary: Update transaction notes
+      description: API for updating transaction notes
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Transaction Notes Payload
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionNotes'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction notes updated successfully
+          schema:
+             $ref: '#/definitions/TransactionResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Specified resource was not found 
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module in body
+      summary: delete notes in transaction
+      description: API for deleting notes in a transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Transaction Notes Payload
+          required: true
+          schema:
+            $ref: '#/definitions/InfosDelete'
       produces:
         - application/json
       responses:
@@ -535,8 +820,84 @@ definitions:
     properties:
       firstName:
         type: string
+        example: Tony
       lastName:
         type: string
+        example: Stark
+  Account:
+    type: object
+    properties:
+      userId:
+        type: string
+        example: 1256
+      month:
+        type: number
+        example: 10
+  Transaction:
+    type: object
+    properties:
+      userId:
+        type: string
+        example: 1256
+      accountId:
+        type: string
+        example: 125655
+  Category:
+    type: object
+    properties:
+      userId:
+        type: string
+        example: 1256
+      accountId:
+        type: string
+        example: 125655
+      transactionId:
+        type: string
+        example: 12565588
+      categoryLabel:
+        type: string
+        example: Food
+  TransactionType:
+    type: object
+    properties:
+      userId:
+        type: string
+        example: 1256
+      accountId:
+        type: string
+        example: 125655
+      transactionId:
+        type: string
+        example: 12565588
+      transactionType:
+        type: string
+        example: Electronic
+  TransactionNotes:
+    type: object
+    properties:
+      userId:
+        type: string
+        example: 1256
+      accountId:
+        type: string
+        example: 125655
+      transactionId:
+        type: string
+        example: 12565588
+      transactionNotes:
+        type: string
+  InfosDelete:
+    type: object
+    properties:
+      userId:
+        type: string
+        example: 1256
+      accountId:
+        type: string
+        example: 125655
+      transactionId:
+        type: string
+        example: 12565588
   AccountResponse:
       type: object
       properties:

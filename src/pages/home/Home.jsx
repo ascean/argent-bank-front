@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import BankFeature from "../../components/bankFeature/BankFeature";
+import Spinner from "../../components/spinner/Spinner";
 import { isValidToken } from "../../interceptors/authReqInterceptor";
-import { fetchProfile } from "../../redux/auth/authSlice";
+import { fetchProfile, reset } from "../../redux/auth/authSlice";
 import chatIcon from "./img/icon-chat.png";
 import moneyIcon from "./img/icon-money.png";
 import securityIcon from "./img/icon-security.png";
@@ -11,11 +12,46 @@ import securityIcon from "./img/icon-security.png";
 const Home = () => {
 
     const dispatch = useDispatch()
-    const navigate = useNavigate()
+
+    const { user, isError, isLoading, isSuccess, message } = useSelector(
+        (state) => state.auth
+    );
 
     useEffect(() => {
-        isValidToken(localStorage.getItem("token")) ? dispatch(fetchProfile()) : navigate("/login");
-    }, [dispatch, navigate]);
+        isValidToken(localStorage.getItem("token")) ? dispatch(fetchProfile()) : dispatch(reset());
+    }, [dispatch]);
+
+
+    useEffect(() => {
+        if (isError) {
+            toast.error("Fetch : " + message);
+        }
+        if (isSuccess || user) {
+            switch (user) {
+                case 400:
+                    toast.error("Invalid fields");
+                    break;
+
+                case 401:
+                    localStorage.removeItem("token");
+                    dispatch(reset())
+                    break;
+
+                case 500:
+                    toast.error("Internal Server Error");
+                    break;
+
+                default:
+                    
+                    break;
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user, isSuccess, isError, message, dispatch]);
+
+    if (isLoading) {
+        return <Spinner />;
+    }
 
     return (
         <main>
