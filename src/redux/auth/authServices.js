@@ -1,12 +1,13 @@
 import { API_URL } from "../../config";
 import axios from "axios";
-import {myInterceptorRequest} from "../../interceptors/authReqInterceptor";
-import {myInterceptorResponse} from "../../interceptors/authRespInterceptor";
+import {myInterceptorRequest, myInterceptorResponse} from "../../interceptors/authInterceptor";
+import { my401InterceptorResponse } from "../../interceptors/401Interceptor";
 
+//interceptors
 axios.interceptors.request.use(myInterceptorRequest)
 axios.interceptors.response.use(myInterceptorResponse)
+axios.interceptors.response.use(my401InterceptorResponse)
 
-// authInterceptor()
 /**
  * API for signup
  * @param {Object} credentials { "email": "string", "password": "string", "firstName": "string", "lastName": "string"}
@@ -53,8 +54,6 @@ export async function login (credentials) {
  * API for fetching a user profile
  * @return {Object || string} 
  * {"email" : "string", "firstName" : "string", "lastName" : "string", "createAt" : date, "upadateAt" : date , "id" : "string"}
- * or
- * "401"
  * @example 
  * {
  * "email": "tony@stark.com",

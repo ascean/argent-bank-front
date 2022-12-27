@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import BankFeature from "../../components/bankFeature/BankFeature";
 import Spinner from "../../components/spinner/Spinner";
-import { isValidToken } from "../../interceptors/authReqInterceptor";
+import { isValidToken } from "../../utils/tokenControl";
 import { fetchProfile, reset } from "../../redux/auth/authSlice";
+import { noEdit } from "../../redux/edit/editSlice";
 import chatIcon from "./img/icon-chat.png";
 import moneyIcon from "./img/icon-money.png";
 import securityIcon from "./img/icon-security.png";
@@ -17,9 +18,13 @@ const Home = () => {
         (state) => state.auth
     );
 
+    //cancel edit mode because when edit mode is active, header buttons are inactive too
+    if (useSelector((state) => state.edit)) dispatch(noEdit())
+    
+    //useful to add user firstname in header
     useEffect(() => {
         isValidToken(localStorage.getItem("token")) ? dispatch(fetchProfile()) : dispatch(reset());
-    }, [dispatch]);
+    }, []);
 
 
     useEffect(() => {
@@ -27,13 +32,13 @@ const Home = () => {
             toast.error("Fetch : " + message);
         }
         if (isSuccess || user) {
+            console.log(user);
             switch (user) {
                 case 400:
                     toast.error("Invalid fields");
                     break;
 
                 case 401:
-                    localStorage.removeItem("token");
                     dispatch(reset())
                     break;
 
@@ -42,12 +47,11 @@ const Home = () => {
                     break;
 
                 default:
-                    
                     break;
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user, isSuccess, isError, message, dispatch]);
+    }, [user, isSuccess, isError, message]);
 
     if (isLoading) {
         return <Spinner />;

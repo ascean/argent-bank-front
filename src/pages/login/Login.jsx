@@ -12,8 +12,8 @@ import { reset } from "../../redux/auth/authSlice";
 const Login = () => {
 
     const [ credentials, setCredentials ] = useState({
-        email: "",
-        password: "",
+        email: "tony@stark.com",
+        password: "password123",
     });
     const { email, password } = credentials;
 
@@ -27,6 +27,7 @@ const Login = () => {
         if (isError) toast.error(message);
 
         if (isSuccess || user) {
+            console.log(user);
             switch (user) {
                 case 400:
                     toast.error("Invalid fields");

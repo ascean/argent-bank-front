@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Account from "../../components/account/Account";
 import Spinner from "../../components/spinner/Spinner";
-import { isValidToken } from "../../interceptors/authReqInterceptor";
+import { isValidToken } from "../../utils/tokenControl";
 import { reset, updateProfile } from "../../redux/auth/authSlice";
 import { fetchProfile } from "../../redux/auth/authSlice";
 import { edit, noEdit } from "../../redux/edit/editSlice";
@@ -31,17 +31,18 @@ const Dashboard = () => {
 
 
     useEffect(() => {
+
         if (isError) {
             toast.error("Fetch : " + message);
         }
         if (isSuccess || user) {
+            console.log(user);
             switch (user) {
                 case 400:
                     toast.error("Invalid fields");
                     break;
 
                 case 401:
-                    localStorage.removeItem("token");
                     navigate("/login");
                     break;
 
@@ -57,7 +58,6 @@ const Dashboard = () => {
                     }));
                     break;
             }
-            // }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, isSuccess, isError, message, dispatch, navigate]);
@@ -102,7 +102,6 @@ const Dashboard = () => {
                         break;
 
                     case 401:
-                        localStorage.removeItem("token");
                         dispatch(reset())
                         navigate("/login");
                         break;

@@ -15,7 +15,6 @@ import {
  * @returns {ReactElement} Header navigation
  */
 const Header = () => {
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.user);
@@ -25,7 +24,7 @@ const Header = () => {
     const onLogout = () => {
         dispatch(logout());
         dispatch(reset());
-        dispatch(noEdit())
+        dispatch(noEdit());
         navigate("/");
     };
 
@@ -43,18 +42,18 @@ const Header = () => {
             {user ? (
                 <div className="main-nav-log">
                     {editMode ? (
-                        <div className="main-nav-item" disabled style={ { "opacity": "0.7" } }>
-                            <FontAwesomeIcon icon={ faCircleUser }  />
-                            <span className="sign-label">
-                                {user.firstName}
-                            </span>
+                        <div
+                            className="main-nav-item"
+                            disabled
+                            style={{ opacity: "0.7" }}
+                        >
+                            <FontAwesomeIcon icon={faCircleUser} />
+                            <span className="sign-label">{user.firstName}</span>
                         </div>
                     ) : (
                         <Link to="/dashboard" className="main-nav-item">
                             <FontAwesomeIcon icon={faCircleUser} />
-                            <span className="sign-label">
-                                {user.firstName}
-                            </span>
+                            <span className="sign-label">{user.firstName}</span>
                         </Link>
                     )}
                     <Link to="/" className="main-nav-item" onClick={onLogout}>
