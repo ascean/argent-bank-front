@@ -3,10 +3,11 @@
 
 ## General informations
 
-This project presents a bank web application. 
-The first step of this project concerns users authentication. Swagger documentation presents API endpoints that will be used in the second step : transactions. 
+This project presents a bank web application : 
+- The first step of this project concerns users authentication. 
+- Swagger documentation presents API endpoints that will be used in the second step : transactions. 
 
-## Prerequisites(for the frontend part)
+## Prerequisites (in frontend part)
 
 - nodeJS (version 16.14.2)
 
@@ -45,7 +46,7 @@ The first step of this project concerns users authentication. Swagger documentat
   git clone https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API.git
 ```
 
-- Follow the readMe instructions
+- Follow the README instructions
 
 #### FRONTEND
 
@@ -104,7 +105,8 @@ You can test application with these two users :
 ## Bank Argent API documentation
 
 Find documentation in the frontend root : swagger.yaml
-You can open it online editor https://editor.swagger.io/
+
+You can open it with online editor : https://editor.swagger.io/
 
 ## Author
 
