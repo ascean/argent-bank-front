@@ -1,70 +1,111 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Argent-Bank
 
-## Available Scripts
+## General informations
 
-In the project directory, you can run:
+This project presents a bank web application. 
+The first step of this project concerns users authentication. Swagger documentation presents API endpoints that will be used in the second step : transactions. 
 
-### `npm start`
+## Prerequisites(for the frontend part)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- nodeJS (version 16.14.2)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- npm (version 8.5.0)
 
-### `npm test`
+- Visual Studio Code (version 1.73.1) or another code editor
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- git
 
-### `npm run build`
+## Technologies and Dependencies
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Javascript
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [Sass (version 1.56)](https://sass-lang.com/)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- [Axios (version 1.2.1)](https://axios-http.com/)
 
-### `npm run eject`
+- [React (version 18.2)](https://fr.reactjs.org/)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- [React-dom (version 18.2)](https://fr.reactjs.org/docs/react-dom.html) 
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [React-scripts (version 5.0.1)](https://www.npmjs.com/package/react-scripts) 
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- [React-toastify (version 9.1)](https://fkhadra.github.io/react-toastify/introduction)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- [Redux-toolkit (version 1.9.1)](https://redux-toolkit.js.org/)
 
-## Learn More
+- [jwt-decode (version 3.1)](https://jwt.io/libraries)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Installation 
+#### BACKEND    
+    
+- Clone this project in your folder (argent-bank for example)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+  git clone https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API.git
+```
 
-### Code Splitting
+- Follow the readMe instructions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### FRONTEND
 
-### Analyzing the Bundle Size
+- Clone this project in the same folder (argent-bank for example)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+    git clone https://github.com/ascean/argent-bank-front.git
+```
 
-### Making a Progressive Web App
+- Go to the project directory
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+  cd frontend
+```
 
-### Advanced Configuration
+- Install dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+  npm install
+```
 
-### Deployment
+## Run the project
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+You need to run first backend then frontend
 
-### `npm run build` fails to minify
+#### BACKEND
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+  npm run dev:server
+```
+
+#### FRONTEND
+
+```bash
+  npm run start
+```
+
+## Populated database data
+
+You can test application with these two users :
+
+### Tony Stark
+
+- First Name: `Tony`
+- Last Name: `Stark`
+- Email: `tony@stark.com`
+- Password: `password123`
+
+### Steve Rogers
+
+- First Name: `Steve`,
+- Last Name: `Rogers`,
+- Email: `steve@rogers.com`,
+- Password: `password456`
+
+## Bank Argent API documentation
+
+Find documentation in the frontend root : swagger.yaml
+You can open it online editor https://editor.swagger.io/
+
+## Author
+
+- Sandrine
