@@ -4,16 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import Spinner from "../../components/spinner/Spinner";
 import { login } from "../../redux/auth/authSlice";
 import { reset } from "../../redux/auth/authSlice";
+import { generateErrorMessage } from "../../utils/toastMessages";
 
 const Login = () => {
 
     const [ credentials, setCredentials ] = useState({
-        email: "tony@stark.com",
-        password: "password123",
+        email: "",
+        password: "",
     });
     const { email, password } = credentials;
 
@@ -23,23 +23,13 @@ const Login = () => {
         (state) => state.auth
     );
 
+    
     useEffect(() => {
-        if (isError) toast.error(message);
-
-        if (isSuccess || user) {
-            console.log(user);
-            switch (user) {
-                case 400:
-                    toast.error("Invalid fields");
-                    break;
-                    
-                case 500:
-                    toast.error("Internal Server Error");
-                    break;
-
-                default:
-                    navigate("/dashboard");
-                    break;
+        if (message || isError) {
+            generateErrorMessage(message)
+        } else {
+            if (isSuccess || user) {
+                navigate("/dashboard");
             }
         }
         dispatch(reset());

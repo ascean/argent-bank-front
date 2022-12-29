@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { register, reset } from "../../redux/auth/authSlice";
 import Spinner from "../../components/spinner/Spinner";
+import { generateErrorMessage, generateSuccessMessage } from "../../utils/toastMessages";
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-F0-9._-]+\.[a-zA-Z]{2,6}$/;
 const NAME_REGEX = /^[a-zàâäãçéèêëìïîòôöõùûüñ'-]{2,23}$/i;
@@ -19,11 +20,11 @@ const PWD_REGEX = /^[A-z0-9!@#$%]{6,23}$/;
 
 const Register = () => {
     const [credentials, setCredentials] = useState({
-        email: "titi@titi.fr",
-        password: "111111",
-        passwordConfirm: "111111",
-        firstName: "pppp",
-        lastName: "pppp",
+        email: "",
+        password: "",
+        passwordConfirm: "",
+        firstName: "",
+        lastName: "",
     });
 
     const { email, password, passwordConfirm, firstName, lastName } =
@@ -73,21 +74,13 @@ const Register = () => {
     }, [lastName]);
 
     useEffect(() => {
-        if (isError) toast.error(message);
-
-        if (isSuccess || user) {
-            switch (user) {
-                case 400:
-                    toast.error("User already exists");
-                    break;
-
-                case 500:
-                    toast.error("Internal Server Error");
-                    break;
-
-                default:
-                    navigate("/login");
-                    break;
+        if (message || isError) {
+            generateErrorMessage(message)
+        } else {
+            
+            if (isSuccess || user) {
+                generateSuccessMessage("Congrats ! Account created successfully. Please log in")
+                navigate("/login");
             }
         }
         dispatch(reset());
@@ -103,7 +96,6 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validEmail) {
-            console.log("ok");
             emailRef.current.focus();
             return;
         }

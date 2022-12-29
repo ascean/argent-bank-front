@@ -9,7 +9,6 @@ export const my401InterceptorResponse = axios.interceptors.response.use(
         return response;
     },
     err => {
-        console.log(err);
         if (err.response.status === 401) localStorage.removeItem("token");
         return Promise.reject(err);
     }

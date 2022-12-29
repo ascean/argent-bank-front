@@ -7,15 +7,15 @@
     width: 80%;
     margin: 0 auto;
     flex-direction: column;
-    padding: 1.5rem;
+    padding: 1.5em;
     box-sizing: border-box;
     text-align: left;
-    margin-bottom: 2rem;
+    margin-bottom: 2em;
 }
 
 .account-amount {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 2.2em;
     font-weight: bold;
 }
 
@@ -26,7 +26,7 @@
 .account-title {
     margin: 0;
     padding: 0;
-    font-size: 1rem;
+    font-size: 1em;
     font-weight: normal;
 }
 
@@ -39,9 +39,9 @@
     display: block;
     width: 100%;
     padding: 8px;
-    font-size: 1.1rem;
+    font-size: 1em;
     font-weight: bold;
-    margin-top: 1rem;
+    margin-top: 1em;
     border-color: $color1;
     background-color: $color1;
     color: #fff;

@@ -9,6 +9,7 @@ import {
     faSignInAlt,
     faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 
 /**
  * Component header navigation
@@ -21,6 +22,17 @@ const Header = () => {
 
     const editMode = useSelector((state) => state.edit.editMode);
 
+    const gotToHome = () => {
+        if (editMode) {
+            dispatch(noEdit())
+            navigate("/")
+        }
+    }
+
+    useEffect(() => {
+        
+    },[dispatch])
+
     const onLogout = () => {
         dispatch(logout());
         dispatch(reset());
@@ -29,15 +41,26 @@ const Header = () => {
     };
 
     return (
-        <nav className="main-nav">
-            <Link to="/" className="main-nav-logo">
-                <img
-                    className="main-nav-logo-image"
-                    src="./img/argentBankLogo.png"
-                    alt="Argent Bank Logo"
-                />
-                <h1 className="sr-only">Argent Bank</h1>
-            </Link>
+        <div className="main-nav">
+            {editMode ? (
+                <div type="button" className="main-nav-logo" onClick={() => gotToHome()}>
+                    <img
+                        className="main-nav-logo-image"
+                        src="./img/argentBankLogo.png"
+                        alt="Argent Bank Logo"
+                    />
+                    <h1 className="sr-only">Argent Bank</h1>
+                </div>
+            ) : (
+                <Link to="/" className="main-nav-logo">
+                    <img
+                        className="main-nav-logo-image"
+                        src="./img/argentBankLogo.png"
+                        alt="Argent Bank Logo"
+                    />
+                    <h1 className="sr-only">Argent Bank</h1>
+                </Link>
+            )}
 
             {user ? (
                 <div className="main-nav-log">
@@ -73,7 +96,7 @@ const Header = () => {
                     </Link>
                 </div>
             )}
-        </nav>
+        </div>
     );
 };
 

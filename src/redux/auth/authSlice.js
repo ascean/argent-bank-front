@@ -1,15 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authServices";
 
-//get user from localStorage
-// const user = localStorage.getItem("user");
-
 const initialState = {
     user: null,
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: "",
+    message: null,
 };
 
 //Register user
@@ -25,12 +22,11 @@ export const register = createAsyncThunk(
                     error.response.data.message) ||
                 error.message ||
                 error.toString();
-            return thunkAPI.rejectWithValue(message);
+                return thunkAPI.rejectWithValue(message);
+            }
         }
-    }
-);
+        );
 
-//Login user
 export const login = createAsyncThunk(
     "auth/login",
     async (user, thunkAPI) => {
@@ -38,9 +34,9 @@ export const login = createAsyncThunk(
             return await authService.login(user);
         } catch (error) {
             const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
+            (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
                 error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
@@ -99,33 +95,36 @@ export const authSlice = createSlice({
             state.isLoading = false;
             state.isSuccess = false;
             state.isError = false;
-            state.message = "";
+            state.message = null;
         },
     },
     extraReducers: (builder) => {
         builder
+            
+            //REGISTER
             .addCase(register.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(register.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.user = action.payload;
+                typeof action.payload === "number" ? state.message = action.payload : state.user = action.payload;
             })
             .addCase(register.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
-                state.user = "";
+                state.user = null;
             })
 
+            //LOGIN
             .addCase(login.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.user = action.payload;    //contain user token
+                typeof action.payload === "number" ? state.message = action.payload : state.user = action.payload;
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;
@@ -134,13 +133,14 @@ export const authSlice = createSlice({
                 state.user = null;
             })
 
+            //FETCHPROFILE
             .addCase(fetchProfile.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(fetchProfile.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.user = action.payload; //{email, firstName, lastName, createdAt, updatedAt, id}
+                typeof action.payload === "number" ? state.message = action.payload : state.user = action.payload;
             })
             .addCase(fetchProfile.rejected, (state, action) => {
                 state.isLoading = false;
@@ -148,24 +148,26 @@ export const authSlice = createSlice({
                 state.message = action.payload;
                 state.user = null;
             })
-
+            
+            //LOGOUT
             .addCase(logout.fulfilled, (state) => {
                 state.user = null;
             })
-
+            
+            //UPDATEPROFILE
             .addCase(updateProfile.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(updateProfile.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.user = action.payload; //{email, firstName, lastName, createdAt, updatedAt, id}
+                typeof action.payload === "number" ? state.message = action.payload : state.user = action.payload;
             })
             .addCase(updateProfile.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
-                state.user = "";
+                state.user = null;
             });
     },
 });

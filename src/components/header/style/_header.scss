@@ -39,7 +39,7 @@
 
 .main-nav-item {
     text-decoration: none;
-    margin-right: 0.5rem;
+    margin-right: 0.5em;
     display: flex;
     gap: 5px;
     align-items: center;
@@ -52,6 +52,7 @@
 .main-nav-logo {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .main-nav-logo-image {

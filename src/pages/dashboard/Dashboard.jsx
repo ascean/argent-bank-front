@@ -1,66 +1,64 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import Account from "../../components/account/Account";
 import Spinner from "../../components/spinner/Spinner";
 import { isValidToken } from "../../utils/tokenControl";
 import { reset, updateProfile } from "../../redux/auth/authSlice";
 import { fetchProfile } from "../../redux/auth/authSlice";
 import { edit, noEdit } from "../../redux/edit/editSlice";
+import {
+    generateErrorMessage,
+    generateWarningMessage,
+} from "../../utils/toastMessages";
 
 const Dashboard = () => {
+    
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { user, isError, isLoading, isSuccess, message } = useSelector(
         (state) => state.auth
     );
-
-    const navigate = useNavigate();
 
     const [credentials, setCredentials] = useState({
         firstName: "",
         lastName: "",
     });
+    const [editUser, setEditUser] = useState(false);
+    
     const { firstName, lastName } = credentials;
 
-    const [ editUser, setEditUser ] = useState(false);
-    
+    const goToLogin = () => {
+        generateWarningMessage("Session expired. Please log in");
+        dispatch(noEdit());
+        navigate("/login");
+    };
+
     useEffect(() => {
-        isValidToken(localStorage.getItem("token")) ? dispatch(fetchProfile()) : navigate("/login");
+        if (isValidToken(localStorage.getItem("token"))) {
+            dispatch(fetchProfile());
+        } else {
+            navigate("/login");
+        }
     }, [dispatch, navigate]);
 
-
     useEffect(() => {
-
-        if (isError) {
-            toast.error("Fetch : " + message);
-        }
-        if (isSuccess || user) {
-            console.log(user);
-            switch (user) {
-                case 400:
-                    toast.error("Invalid fields");
-                    break;
-
-                case 401:
-                    navigate("/login");
-                    break;
-
-                case 500:
-                    toast.error("Internal Server Error");
-                    break;
-
-                default:
-                    setCredentials((prevState) => ({
-                        ...prevState,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                    }));
-                    break;
+        if (message || isError) {
+            generateErrorMessage(message);
+            if (message === 401) {
+                navigate("/login");
+                dispatch(reset());
+            }
+        } else {
+            if (isSuccess || user) {
+                setCredentials((prevState) => ({
+                    ...prevState,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                }));
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user, isSuccess, isError, message, dispatch, navigate]);
+    }, [user, isError, isSuccess, message, dispatch, navigate]);
 
     //EDIT NAME : CLIC ON EDIT NAME BUTTON
     const handleEdit = () => {
@@ -68,7 +66,7 @@ const Dashboard = () => {
             setEditUser(!editUser);
             dispatch(edit());
         } else {
-            navigate("/login");
+            goToLogin();
         }
     };
 
@@ -80,40 +78,36 @@ const Dashboard = () => {
                 [e.target.name]: e.target.value,
             }));
         } else {
-            navigate("login");
+            goToLogin();
         }
     };
 
     //EDIT NAME : CLIC ON SAVE BUTTON
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        if (!isValidToken(localStorage.getItem("token"))) {
+            goToLogin()
+            return;
+        }
         if (!!firstName && !!lastName) {
             const userData = { firstName, lastName };
             dispatch(updateProfile(userData));
 
-            if (isError) {
-                toast.error("Update : " + message);
-            }
-            if (isSuccess || user) {
-                switch (user) {
-                    case 400:
-                        toast.error("Invalid fields");
-                        break;
+            if (message || isError) {
+                generateErrorMessage(message);
+                if (message === 401) {
+                    navigate("/login");
+                }
+            } else {
+                if (isSuccess || user) {
+                    setEditUser(false);
+                    dispatch(noEdit());
 
-                    case 401:
-                        dispatch(reset())
-                        navigate("/login");
-                        break;
-
-                    case 500:
-                        toast.error("Internal Server Error");
-                        break;
-
-                    default:
-                        setEditUser(false);
-                        dispatch(noEdit());
-                        break;
+                    setCredentials((prevState) => ({
+                        ...prevState,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                    }));
                 }
             }
         }
@@ -122,7 +116,7 @@ const Dashboard = () => {
     // EDIT NAME : CLIC ON CANCEL BUTTON
     const resetFields = () => {
         if (!isValidToken(localStorage.getItem("token"))) {
-            navigate("/login");
+            goToLogin()
         }
         document.getElementById("firstName").value = "";
         document.getElementById("lastName").value = "";

@@ -40,13 +40,12 @@ export async function register(credentials) {
  * @return {string} token
 */
 export async function login (credentials) {
-    console.log("login");
     try {
         const url = `${API_URL}/user/login/`;
         const response = await axios.post(url, credentials);
         return response.data.body.token;
     } catch (error) {
-        return error.request.status ;
+        return error.request.status ; //400 if bad credentials
     }
 }
 
@@ -92,10 +91,9 @@ export async function login (credentials) {
    export async function updateProfile(credentials) {
        try {
         const url = `${API_URL}/user/profile`;
-        const token = window.localStorage.getItem("token");
-        const response = await axios.put(url, credentials, token);
+        const response = await axios.put(url, credentials);
         return response.data.body;
-    } catch (error) {
+       } catch (error) {
         return error.response.status;
     }
 }

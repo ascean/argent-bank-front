@@ -2,9 +2,9 @@
     display: block;
     width: 100%;
     padding: 8px;
-    font-size: 1.1rem;
+    font-size: 1.1em;
     font-weight: bold;
-    margin-top: 1rem;
+    margin-top: 1em;
     border-color: $color1;
     background-color: $color1;
     color: #fff;
@@ -29,12 +29,12 @@
     background-color: white;
     width: 300px;
     margin: 0 auto;
-    margin-top: 3rem;
-    padding: 2rem;
+    margin-top: 3em;
+    padding: 2em;
 
     .error {
         color: crimson;
-        font-size: 0.7rem;
+        font-size: 0.7em;
         font-style: italic;
     }
 
@@ -42,16 +42,16 @@
         margin-top: 10px;
         margin-bottom: 0px;
         color: crimson;
-        font-size: 1.5rem;
+        font-size: 1.5em;
     }
 }
 
 
-.input-remember {
+.input-emember {
     display: flex;
 
     label {
-        margin-left: 0.25rem;
+        margin-left: 0.25em;
     }
 }
 
@@ -59,7 +59,7 @@
     display: flex;
     flex-direction: column;
     text-align: left;
-    margin-bottom: 1rem;
+    margin-bottom: 1em;
 
     label {
         font-weight: bold;
@@ -67,7 +67,7 @@
 
     input {
         padding: 5px;
-        font-size: 1.2rem;
+        font-size: 1.2em;
 
         &:focus-visible {
             outline: 1px solid $color1;
@@ -78,18 +78,18 @@
 }
 
 .instructions {
-    font-size: 0.75rem;
+    font-size: 0.75em;
     border-radius: 2px;
     background: #000;
     color: #fff;
-    padding: 0.25rem;
+    padding: 0.25em;
     position: relative;
     margin-top: 10px;
     margin-bottom: 0px;
 }
 
 .instructions>svg {
-    margin-right: 0.25rem;
+    margin-right: 0.25em;
 }
 
 .offscreen {
@@ -103,20 +103,20 @@
 
 .valid {
     color: $color1;
-    margin-left: 0.25rem;
+    margin-left: 0.25em;
 }
 
 .invalid {
     color: red;
-    margin-left: 0.25rem;
+    margin-left: 0.25em;
 }
 
 .errmsg {
     background-color: lightpink;
     color: firebrick;
     font-weight: bold;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
 }
 .inactive {
     opacity: 0.5;
