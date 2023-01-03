@@ -22,7 +22,7 @@ const Header = () => {
 
     const editMode = useSelector((state) => state.edit.editMode);
 
-    const gotToHome = () => {
+    const goToHome = () => {
         if (editMode) {
             dispatch(noEdit())
             navigate("/")
@@ -43,7 +43,7 @@ const Header = () => {
     return (
         <div className="main-nav">
             {editMode ? (
-                <div type="button" className="main-nav-logo" onClick={() => gotToHome()}>
+                <div type="button" className="main-nav-logo" onClick={() => goToHome()}>
                     <img
                         className="main-nav-logo-image"
                         src="./img/argentBankLogo.png"

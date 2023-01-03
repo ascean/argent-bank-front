@@ -1,12 +1,15 @@
-import { API_URL } from "../../config";
+import { API_URL } from "../config";
 import axios from "axios";
-import {myInterceptorRequest, myInterceptorResponse} from "../../interceptors/authInterceptor";
-import { my401InterceptorResponse } from "../../interceptors/401Interceptor";
+import {
+    myInterceptorRequest,
+    myInterceptorResponse,
+} from "../interceptors/authInterceptor";
+import { my401InterceptorResponse } from "../interceptors/401Interceptor";
 
 //interceptors
-axios.interceptors.request.use(myInterceptorRequest)
-axios.interceptors.response.use(myInterceptorResponse)
-axios.interceptors.response.use(my401InterceptorResponse)
+axios.interceptors.request.use(myInterceptorRequest);
+axios.interceptors.response.use(myInterceptorResponse);
+axios.interceptors.response.use(my401InterceptorResponse);
 
 /**
  * API for signup
@@ -38,20 +41,20 @@ export async function register(credentials) {
  * API for Login
  * @param {Object} credentials { "firstName": "string", "lastName": "string"}
  * @return {string} token
-*/
-export async function login (credentials) {
+ */
+export async function login(credentials) {
     try {
         const url = `${API_URL}/user/login/`;
         const response = await axios.post(url, credentials);
         return response.data.body.token;
     } catch (error) {
-        return error.request.status ; //400 if bad credentials
+        return error.request.status; //400 if bad credentials
     }
 }
 
 /**
  * API for fetching a user profile
- * @return {Object || string} 
+ * @return {Object} 
  * {"email" : "string", "firstName" : "string", "lastName" : "string", "createAt" : date, "upadateAt" : date , "id" : "string"}
  * @example 
  * {
@@ -63,7 +66,7 @@ export async function login (credentials) {
     "id": "63973f1f5aad700cfc33ecdb"
     * }
     */
-   export async function fetchProfile() {
+export async function fetchProfile() {
     try {
         const url = `${API_URL}/user/profile`;
         const response = await axios.post(url);
@@ -88,12 +91,12 @@ export async function login (credentials) {
     "id": "63973f1f5aad700cfc33ecdb"
     * }
     */
-   export async function updateProfile(credentials) {
-       try {
+export async function updateProfile(credentials) {
+    try {
         const url = `${API_URL}/user/profile`;
         const response = await axios.put(url, credentials);
         return response.data.body;
-       } catch (error) {
+    } catch (error) {
         return error.response.status;
     }
 }

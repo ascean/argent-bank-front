@@ -7,7 +7,6 @@ import { isValidToken } from '../utils/tokenControl';
  */
 export const myInterceptorRequest = axios.interceptors.request.use(
     function (config) {
-
         const token = localStorage.getItem("token")
         if ((config.url !== "http://localhost:3001/api/v1/user/login/"
             || config.url !== "http://localhost:3001/api/v1/user/signup")
@@ -15,7 +14,6 @@ export const myInterceptorRequest = axios.interceptors.request.use(
             config.headers[ "Authorization" ] = "Bearer " + token;
         }
         return config;
-        
     },
     function (error) {
         return Promise.reject(error);
@@ -27,7 +25,6 @@ export const myInterceptorRequest = axios.interceptors.request.use(
  */
 export const myInterceptorResponse = axios.interceptors.response.use(
     response => {
-
         if (response.request.responseURL === "http://localhost:3001/api/v1/user/login/" && response.data.body.token) {
             localStorage.setItem("token", response.data.body.token);
         }

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import authService from "./authServices";
+import authService from "../../services/authServices";
 
 const initialState = {
     user: null,
@@ -22,27 +22,25 @@ export const register = createAsyncThunk(
                     error.response.data.message) ||
                 error.message ||
                 error.toString();
-                return thunkAPI.rejectWithValue(message);
-            }
-        }
-        );
-
-export const login = createAsyncThunk(
-    "auth/login",
-    async (user, thunkAPI) => {
-        try {
-            return await authService.login(user);
-        } catch (error) {
-            const message =
-            (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-                error.message ||
-                error.toString();
             return thunkAPI.rejectWithValue(message);
         }
     }
 );
+
+//login user
+export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
+    try {
+        return await authService.login(user);
+    } catch (error) {
+        const message =
+            (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+            error.message ||
+            error.toString();
+        return thunkAPI.rejectWithValue(message);
+    }
+});
 
 //Fetch profile user
 export const fetchProfile = createAsyncThunk(
@@ -100,7 +98,6 @@ export const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            
             //REGISTER
             .addCase(register.pending, (state) => {
                 state.isLoading = true;
@@ -108,7 +105,9 @@ export const authSlice = createSlice({
             .addCase(register.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                typeof action.payload === "number" ? state.message = action.payload : state.user = action.payload;
+                typeof action.payload === "number"
+                    ? (state.message = action.payload)
+                    : (state.user = action.payload);
             })
             .addCase(register.rejected, (state, action) => {
                 state.isLoading = false;
@@ -124,7 +123,9 @@ export const authSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                typeof action.payload === "number" ? state.message = action.payload : state.user = action.payload;
+                typeof action.payload === "number"
+                    ? (state.message = action.payload)
+                    : (state.user = action.payload);
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;
@@ -140,7 +141,9 @@ export const authSlice = createSlice({
             .addCase(fetchProfile.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                typeof action.payload === "number" ? state.message = action.payload : state.user = action.payload;
+                typeof action.payload === "number"
+                    ? (state.message = action.payload)
+                    : (state.user = action.payload);
             })
             .addCase(fetchProfile.rejected, (state, action) => {
                 state.isLoading = false;
@@ -148,12 +151,12 @@ export const authSlice = createSlice({
                 state.message = action.payload;
                 state.user = null;
             })
-            
+
             //LOGOUT
             .addCase(logout.fulfilled, (state) => {
                 state.user = null;
             })
-            
+
             //UPDATEPROFILE
             .addCase(updateProfile.pending, (state) => {
                 state.isLoading = true;
@@ -161,7 +164,9 @@ export const authSlice = createSlice({
             .addCase(updateProfile.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                typeof action.payload === "number" ? state.message = action.payload : state.user = action.payload;
+                typeof action.payload === "number"
+                    ? (state.message = action.payload)
+                    : (state.user = action.payload);
             })
             .addCase(updateProfile.rejected, (state, action) => {
                 state.isLoading = false;

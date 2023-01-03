@@ -129,7 +129,7 @@ const Register = () => {
     return (
         <main className="main bg-dark">
             <section className="register-content">
-                <FontAwesomeIcon icon={faCircleUser} />
+                <FontAwesomeIcon icon={faCircleUser} size={"3x"} />
                 <h1>Register</h1>
 
                 <form onSubmit={handleSubmit}>

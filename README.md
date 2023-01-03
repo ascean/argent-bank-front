@@ -37,6 +37,8 @@ This project presents a bank web application :
 
 - [jwt-decode (version 3.1)](https://jwt.io/libraries)
 
+- [JsDoc (version 4.0)](https://jsdoc.app/)
+
 ## Installation 
 #### BACKEND    
     
@@ -107,6 +109,22 @@ You can test application with these two users :
 Find documentation in the frontend root : swagger.yaml
 
 You can open it with online editor : https://editor.swagger.io/
+
+## Document source code with JsDoc
+
+### Installation
+
+JsDoc is installed in devDependencies.
+
+### Generation
+
+```bash
+  npm run jsdoc
+```
+### Consulting
+
+Jsdoc files are generated in public folder. 
+You can access to jsdoc by using URL : http://localhost:3000/docs/
 
 ## Author
 

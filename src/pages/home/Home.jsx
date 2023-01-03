@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import BankFeature from "../../components/bankFeature/BankFeature";
 import Spinner from "../../components/spinner/Spinner";
-import { isValidToken } from "../../utils/tokenControl";
 import { fetchProfile, reset } from "../../redux/auth/authSlice";
+import { isValidToken } from "../../utils/tokenControl";
 import chatIcon from "./img/icon-chat.png";
 import moneyIcon from "./img/icon-money.png";
 import securityIcon from "./img/icon-security.png";
@@ -71,7 +71,7 @@ const Home = () => {
                     icon={chatIcon}
                     alt={"Chat Icon"}
                     title={"You are our #1 priority"}
-                    content={
+                    description={
                         "Need to talk to a representative? You can get in touch through our 24/7 chat or through a phone call in less than 5 minutes."
                     }
                 />
@@ -79,7 +79,7 @@ const Home = () => {
                     icon={moneyIcon}
                     alt={"Money Icon"}
                     title={"More savings means higher rates"}
-                    content={
+                    description={
                         "The more you save with us, the higher your interest rate will be!"
                     }
                 />
@@ -87,7 +87,7 @@ const Home = () => {
                     icon={securityIcon}
                     alt={"Security Icon"}
                     title={"Security you can trust"}
-                    content={
+                    description={
                         "We use top of the line encryption to make sure your data and money is always safe."
                     }
                 />

@@ -7,13 +7,13 @@ import { NavLink } from "react-router-dom";
  */
 const Error = () => {
     return (
-        <div className="error">
+        <main className="main bg-dark error">
             <div>
                 <h1>404</h1>
                 <h2>Oups ! This page does not exist.</h2>
             </div>
             <NavLink to="/">Back to home page</NavLink>
-        </div>
+        </main>
     );
 };
 

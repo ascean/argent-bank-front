@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/spinner/Spinner";
 import { login } from "../../redux/auth/authSlice";
 import { reset } from "../../redux/auth/authSlice";
 import { generateErrorMessage } from "../../utils/toastMessages";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
 
@@ -25,6 +25,8 @@ const Login = () => {
 
     
     useEffect(() => {
+        console.log("UE1");
+
         if (message || isError) {
             generateErrorMessage(message)
         } else {
@@ -44,6 +46,8 @@ const Login = () => {
     };
 
     const handleSubmit = (e) => {
+        console.log("submit");
+
         e.preventDefault();
         const userData = {
             email:email.trim(),
@@ -59,7 +63,7 @@ const Login = () => {
     return (
         <main className="main bg-dark">
             <section className="register-content">
-                <FontAwesomeIcon icon={faCircleUser} />
+                <FontAwesomeIcon icon={ faCircleUser } size={"3x"} />
                 <h1>Log In</h1>
 
                 <form onSubmit={handleSubmit}>

@@ -2,13 +2,13 @@ import React from "react";
 
 /**
  * Display account items
- * @param {string} title
- * @param {string} amount
- * @param {string} description
- * @param {boolean} editMode
+ * @param {string} title account title
+ * @param {string} amount account amount
+ * @param {string} description account description
+ * @param {boolean} editMode edit mode used for button style
  * @returns {ReactElement} Account
  */
-const Transaction = ({ title, amount, description, editMode = false }) => {
+const Account = ({ title, amount, description, editMode = false }) => {
     return (
         <section className="account">
             <div className="account-content-wrapper">
@@ -34,4 +34,4 @@ const Transaction = ({ title, amount, description, editMode = false }) => {
     );
 };
 
-export default Transaction;
+export default Account;
