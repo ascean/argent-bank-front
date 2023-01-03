@@ -9,7 +9,6 @@ import {
     faSignInAlt,
     faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
 
 /**
  * Component header navigation
@@ -19,19 +18,14 @@ const Header = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.user);
-
     const editMode = useSelector((state) => state.edit.editMode);
 
-    const goToHome = () => {
+    const gotToHome = () => {
         if (editMode) {
             dispatch(noEdit())
             navigate("/")
         }
     }
-
-    useEffect(() => {
-        
-    },[dispatch])
 
     const onLogout = () => {
         dispatch(logout());
@@ -43,7 +37,7 @@ const Header = () => {
     return (
         <div className="main-nav">
             {editMode ? (
-                <div type="button" className="main-nav-logo" onClick={() => goToHome()}>
+                <div type="button" className="main-nav-logo" onClick={() => gotToHome()}>
                     <img
                         className="main-nav-logo-image"
                         src="./img/argentBankLogo.png"

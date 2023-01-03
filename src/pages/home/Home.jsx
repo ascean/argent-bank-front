@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import BankFeature from "../../components/bankFeature/BankFeature";
 import Spinner from "../../components/spinner/Spinner";
-import { fetchProfile, reset } from "../../redux/auth/authSlice";
 import { isValidToken } from "../../utils/tokenControl";
+import { fetchProfile, reset } from "../../redux/auth/authSlice";
 import chatIcon from "./img/icon-chat.png";
 import moneyIcon from "./img/icon-money.png";
 import securityIcon from "./img/icon-security.png";
@@ -12,46 +11,27 @@ import securityIcon from "./img/icon-security.png";
 const Home = () => {
 
     const dispatch = useDispatch()
-
-    const { user, isError, isLoading, isSuccess, message } = useSelector(
+    const { isError, isLoading, message } = useSelector(
         (state) => state.auth
     );
 
-    //useful to add user firstname in header
+    //control token validity expiration date
     useEffect(() => {
-        isValidToken(localStorage.getItem("token")) ? dispatch(fetchProfile()) : dispatch(reset());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
+        if (!isValidToken(localStorage.getItem("token"))) {
+            dispatch(reset());
+            return
+        } 
+        dispatch(fetchProfile());
+        
+    }, [dispatch]);
 
     useEffect(() => {
-        if (isError) {
-            toast.error("Fetch : " + message);
-        }
-        if (isSuccess || user) {
-            switch (user) {
-                case 400:
-                    toast.error("Invalid fields");
-                    break;
-
-                case 401:
-                    dispatch(reset())
-                    break;
-
-                case 500:
-                    toast.error("Internal Server Error");
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user, isSuccess, isError, message]);
-
-    if (isLoading) {
-        return <Spinner />;
-    }
+        //token invalid
+        if (message === 401 || isError) dispatch(reset());
+    })
+    
+    if (isLoading) return <Spinner />
 
     return (
         <main>
@@ -71,7 +51,7 @@ const Home = () => {
                     icon={chatIcon}
                     alt={"Chat Icon"}
                     title={"You are our #1 priority"}
-                    description={
+                    content={
                         "Need to talk to a representative? You can get in touch through our 24/7 chat or through a phone call in less than 5 minutes."
                     }
                 />
@@ -79,7 +59,7 @@ const Home = () => {
                     icon={moneyIcon}
                     alt={"Money Icon"}
                     title={"More savings means higher rates"}
-                    description={
+                    content={
                         "The more you save with us, the higher your interest rate will be!"
                     }
                 />
@@ -87,7 +67,7 @@ const Home = () => {
                     icon={securityIcon}
                     alt={"Security Icon"}
                     title={"Security you can trust"}
-                    description={
+                    content={
                         "We use top of the line encryption to make sure your data and money is always safe."
                     }
                 />

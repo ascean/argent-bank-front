@@ -25,7 +25,6 @@ const Login = () => {
 
     
     useEffect(() => {
-        console.log("UE1");
 
         if (message || isError) {
             generateErrorMessage(message)
@@ -46,7 +45,6 @@ const Login = () => {
     };
 
     const handleSubmit = (e) => {
-        console.log("submit");
 
         e.preventDefault();
         const userData = {

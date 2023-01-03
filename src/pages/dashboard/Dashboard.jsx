@@ -13,7 +13,6 @@ import {
 } from "../../utils/toastMessages";
 
 const Dashboard = () => {
-    
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user, isError, isLoading, isSuccess, message } = useSelector(
@@ -25,15 +24,9 @@ const Dashboard = () => {
         lastName: "",
     });
     const [editUser, setEditUser] = useState(false);
-    
     const { firstName, lastName } = credentials;
 
-    const goToLogin = () => {
-        generateWarningMessage("Session expired. Please log in");
-        dispatch(noEdit());
-        navigate("/login");
-    };
-
+    //control token validity expiration date
     useEffect(() => {
         if (isValidToken(localStorage.getItem("token"))) {
             dispatch(fetchProfile());
@@ -43,14 +36,71 @@ const Dashboard = () => {
     }, [dispatch, navigate]);
 
     useEffect(() => {
+        //token invalid
         if (message || isError) {
             generateErrorMessage(message);
             if (message === 401) {
                 navigate("/login");
                 dispatch(reset());
             }
-        } else {
+            return;
+        }
+        //token valid
+        if (isSuccess || user) {
+            setCredentials((prevState) => ({
+                ...prevState,
+                firstName: user.firstName,
+                lastName: user.lastName,
+            }));
+        }
+    }, [user, isError, isSuccess, message, dispatch, navigate]);
+
+    
+    //EDIT NAME : CLIC ON EDIT NAME BUTTON
+    const handleEdit = () => {
+        if (!isValidToken(localStorage.getItem("token"))) {
+            goToLogin();
+            return;
+        }
+        setEditUser(!editUser);
+        dispatch(edit());
+    };
+
+    //EDIT NAME : Change fields content
+    const handleChange = (e) => {
+        if (!isValidToken(localStorage.getItem("token"))) {
+            goToLogin();
+            return;
+        }
+        setCredentials((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    //EDIT NAME : CLIC ON SAVE BUTTON
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        //token expiration date invalid
+        if (!isValidToken(localStorage.getItem("token"))) {
+            goToLogin();
+            return;
+        }
+
+        if (!!firstName && !!lastName) {
+            const userData = { firstName, lastName };
+            dispatch(updateProfile(userData));
+            
+            if (message || isError) {
+                generateErrorMessage(message);
+                if (message === 401) navigate("/login");
+                return;
+            }
             if (isSuccess || user) {
+                setEditUser(false);
+                dispatch(noEdit());
+                
                 setCredentials((prevState) => ({
                     ...prevState,
                     firstName: user.firstName,
@@ -58,65 +108,13 @@ const Dashboard = () => {
                 }));
             }
         }
-    }, [user, isError, isSuccess, message, dispatch, navigate]);
-
-    //EDIT NAME : CLIC ON EDIT NAME BUTTON
-    const handleEdit = () => {
-        if (isValidToken(localStorage.getItem("token"))) {
-            setEditUser(!editUser);
-            dispatch(edit());
-        } else {
-            goToLogin();
-        }
-    };
-
-    //EDIT NAME : Change fields content
-    const handleChange = (e) => {
-        if (isValidToken(localStorage.getItem("token"))) {
-            setCredentials((prevState) => ({
-                ...prevState,
-                [e.target.name]: e.target.value,
-            }));
-        } else {
-            goToLogin();
-        }
-    };
-
-    //EDIT NAME : CLIC ON SAVE BUTTON
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!isValidToken(localStorage.getItem("token"))) {
-            goToLogin()
-            return;
-        }
-        if (!!firstName && !!lastName) {
-            const userData = { firstName, lastName };
-            dispatch(updateProfile(userData));
-
-            if (message || isError) {
-                generateErrorMessage(message);
-                if (message === 401) {
-                    navigate("/login");
-                }
-            } else {
-                if (isSuccess || user) {
-                    setEditUser(false);
-                    dispatch(noEdit());
-
-                    setCredentials((prevState) => ({
-                        ...prevState,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                    }));
-                }
-            }
-        }
     };
 
     // EDIT NAME : CLIC ON CANCEL BUTTON
     const resetFields = () => {
         if (!isValidToken(localStorage.getItem("token"))) {
-            goToLogin()
+            goToLogin();
+            return;
         }
         document.getElementById("firstName").value = "";
         document.getElementById("lastName").value = "";
@@ -129,10 +127,14 @@ const Dashboard = () => {
         dispatch(noEdit());
     };
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-
+    const goToLogin = () => {
+        generateWarningMessage("Session expired. Please log in");
+        dispatch(noEdit());
+        navigate("/login");
+    };
+    
+    if (isLoading) return <Spinner />
+    
     return (
         <main className={!editUser ? "main bg-dark" : "main bg-light"}>
             <div className="header">
