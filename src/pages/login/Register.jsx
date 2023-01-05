@@ -11,8 +11,11 @@ import {
     faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { register, reset } from "../../redux/auth/authSlice";
-import Spinner from "../../components/spinner/Spinner";
-import { generateErrorMessage, generateSuccessMessage } from "../../utils/toastMessages";
+import {
+    generateErrorMessageRegister,
+    generateSuccessMessage,
+} from "../../utils/toastMessages";
+import { registerAPI } from "../../services/authServices";
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-F0-9._-]+\.[a-zA-Z]{2,6}$/;
 const NAME_REGEX = /^[a-zàâäãçéèêëìïîòôöõùûüñ'-]{2,23}$/i;
@@ -20,11 +23,11 @@ const PWD_REGEX = /^[A-z0-9!@#$%]{6,23}$/;
 
 const Register = () => {
     const [credentials, setCredentials] = useState({
-        email: "",
-        password: "",
-        passwordConfirm: "",
-        firstName: "",
-        lastName: "",
+        email: "toto@toto.fr",
+        password: "111111",
+        passwordConfirm: "111111",
+        firstName: "Toto",
+        lastName: "TOTO",
     });
 
     const { email, password, passwordConfirm, firstName, lastName } =
@@ -38,15 +41,14 @@ const Register = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { user, isError, isLoading, isSuccess, message } = useSelector(
-        (state) => state.auth
-    );
+    const { error, user } = useSelector((state) => state.auth);
 
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
     const firstNameRef = useRef();
     const lastNameRef = useRef();
+
 
     useEffect(() => {
         //check email
@@ -74,18 +76,17 @@ const Register = () => {
     }, [lastName]);
 
     useEffect(() => {
-        if (message || isError) {
-            generateErrorMessage(message)
-        } else {
-            
-            if (isSuccess || user) {
-                generateSuccessMessage("Congrats ! Account created successfully. Please log in")
-                navigate("/login");
-            }
-        }
-        dispatch(reset());
-    }, [user, isError, isSuccess, message, navigate, dispatch]);
-
+        if (error) generateErrorMessageRegister(error);
+        if (user.id > "0") {
+            generateSuccessMessage(
+                "Congrats ! Account created successfully. Please log in"
+            );
+            navigate("/login");
+        } 
+        dispatch(reset())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, error, user.id])
+    
     const handleChange = (e) => {
         setCredentials((prevState) => ({
             ...prevState,
@@ -118,19 +119,26 @@ const Register = () => {
 
         if (password !== passwordConfirm) {
             toast.error("Passwords do not match");
-        } else {
-            dispatch(register({email, password, firstName, lastName},));
+            return;
         }
+
+        const data = {email, firstName, lastName, password}
+        getUserRegister(data)
+        
+        //dispatch(reset());
     };
-    if (isLoading) {
-        return <Spinner />;
+    
+    const getUserRegister = async (userData) => {
+        const data = await registerAPI(userData);
+        dispatch(register(data));
     }
+
 
     return (
         <main className="main bg-dark">
             <section className="register-content">
                 <FontAwesomeIcon icon={faCircleUser} size={"3x"} />
-                <h1>Register</h1>
+                <h1>Sign Up</h1>
 
                 <form onSubmit={handleSubmit}>
                     <div className="input-wrapper">
@@ -293,8 +301,8 @@ const Register = () => {
                                     : "offscreen"
                             }
                         >
-                            <FontAwesomeIcon icon={faInfoCircle} />must contain 2
-                            letters or more
+                            <FontAwesomeIcon icon={faInfoCircle} />
+                            must contain 2 letters or more
                         </p>
                     </div>
                     <div className="input-wrapper">
@@ -332,8 +340,8 @@ const Register = () => {
                                     : "offscreen"
                             }
                         >
-                            <FontAwesomeIcon icon={faInfoCircle} />must contain 2
-                            letters or more
+                            <FontAwesomeIcon icon={faInfoCircle} />
+                            must contain 2 letters or more
                         </p>
                     </div>
 

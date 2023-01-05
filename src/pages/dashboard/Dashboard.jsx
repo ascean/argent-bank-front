@@ -2,63 +2,78 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Account from "../../components/account/Account";
-import Spinner from "../../components/spinner/Spinner";
 import { isValidToken } from "../../utils/tokenControl";
-import { reset, updateProfile } from "../../redux/auth/authSlice";
+import { reset } from "../../redux/auth/authSlice";
 import { fetchProfile } from "../../redux/auth/authSlice";
 import { edit, noEdit } from "../../redux/edit/editSlice";
-import {
-    generateErrorMessage,
-    generateWarningMessage,
-} from "../../utils/toastMessages";
+import { generateWarningMessage } from "../../utils/toastMessages";
+import { fetchProfileAPI, updateProfileAPI } from "../../services/authServices";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user, isError, isLoading, isSuccess, message } = useSelector(
-        (state) => state.auth
-    );
+    const { token, error, user } = useSelector((state) => state.auth);
 
     const [credentials, setCredentials] = useState({
-        firstName: "",
-        lastName: "",
+        firstName: user.firstName,
+        lastName: user.lastName,
     });
     const [editUser, setEditUser] = useState(false);
-    const { firstName, lastName } = credentials;
+
+    useEffect(() => {
+        if (error === 401) dispatch(reset());
+
+        if (error) return;
+
+        setCredentials((prevState) => ({
+            ...prevState,
+            firstName: user.firstName,
+            lastName: user.lastName,
+        }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [error, dispatch]);
 
     //control token validity expiration date
     useEffect(() => {
-        if (isValidToken(localStorage.getItem("token"))) {
-            dispatch(fetchProfile());
-        } else {
-            navigate("/login");
-        }
-    }, [dispatch, navigate]);
+        const token = isValidToken();
 
-    useEffect(() => {
-        //token invalid
-        if (message || isError) {
-            generateErrorMessage(message);
-            if (message === 401) {
-                navigate("/login");
-                dispatch(reset());
-            }
+        if (!token) {
+            navigate("/login");
             return;
         }
-        //token valid
-        if (isSuccess || user) {
-            setCredentials((prevState) => ({
-                ...prevState,
-                firstName: user.firstName,
-                lastName: user.lastName,
-            }));
-        }
-    }, [user, isError, isSuccess, message, dispatch, navigate]);
 
-    
-    //EDIT NAME : CLIC ON EDIT NAME BUTTON
+        getUserProfile(token);
+        setCredentials((prevState) => ({
+            ...prevState,
+            firstName: user.firstName,
+            lastName: user.lastName,
+        }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [token, navigate]);
+
+    /**
+     * Update database profile + state
+     * @param {Object} credentials
+     * @param {string} credentials.firstName new first name
+     * @param {string} credentials.lastName new last name
+     */
+    const updateProfile = async (credentials) => {
+        const data = await updateProfileAPI(credentials);
+        dispatch(updateProfile(data));
+    };
+
+    /**
+     * Get database profile user + update state
+     */
+    const getUserProfile = async () => {
+        const data = await fetchProfileAPI();
+        dispatch(fetchProfile(data));
+    };
+
+    //EDIT NAME FORM
+    //Clic on EDIT NAME button
     const handleEdit = () => {
-        if (!isValidToken(localStorage.getItem("token"))) {
+        if (!isValidToken()) {
             goToLogin();
             return;
         }
@@ -66,9 +81,9 @@ const Dashboard = () => {
         dispatch(edit());
     };
 
-    //EDIT NAME : Change fields content
+    //Change fields content
     const handleChange = (e) => {
-        if (!isValidToken(localStorage.getItem("token"))) {
+        if (!isValidToken()) {
             goToLogin();
             return;
         }
@@ -78,41 +93,44 @@ const Dashboard = () => {
         }));
     };
 
-    //EDIT NAME : CLIC ON SAVE BUTTON
+    //Clic on SAVE name button
     const handleSubmit = (e) => {
         e.preventDefault();
 
         //token expiration date invalid
-        if (!isValidToken(localStorage.getItem("token"))) {
+        if (!isValidToken()) {
             goToLogin();
             return;
         }
 
-        if (!!firstName && !!lastName) {
-            const userData = { firstName, lastName };
-            dispatch(updateProfile(userData));
-            
-            if (message || isError) {
-                generateErrorMessage(message);
-                if (message === 401) navigate("/login");
-                return;
-            }
-            if (isSuccess || user) {
-                setEditUser(false);
-                dispatch(noEdit());
-                
-                setCredentials((prevState) => ({
-                    ...prevState,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                }));
-            }
+        //missing datas
+        if (credentials.firstName === "" && credentials.lastName === "") {
+            generateWarningMessage(
+                "You have to type first name and/or last name"
+            );
+            return;
         }
+
+        //complete empty field with original content
+        // prettier-ignore
+        if (credentials.firstName === "") {
+            setCredentials((prevState) => ({...prevState, firstName: user.firstName }));
+        }
+        // prettier-ignore
+        if (credentials.lastName === "") {
+            setCredentials((prevState) => ({ ...prevState, lastName: user.lastName }));
+        }
+
+        updateProfile(credentials);
+        setEditUser(false);
+        dispatch(noEdit());
+        document.getElementById("firstName").value = "";
+        document.getElementById("lastName").value = "";
     };
 
-    // EDIT NAME : CLIC ON CANCEL BUTTON
-    const resetFields = () => {
-        if (!isValidToken(localStorage.getItem("token"))) {
+    //Clic on CANCEL name button
+    const handleCancel = () => {
+        if (!isValidToken()) {
             goToLogin();
             return;
         }
@@ -130,18 +148,18 @@ const Dashboard = () => {
     const goToLogin = () => {
         generateWarningMessage("Session expired. Please log in");
         dispatch(noEdit());
+        dispatch(reset());
         navigate("/login");
     };
-    
-    if (isLoading) return <Spinner />
-    
+
     return (
         <main className={!editUser ? "main bg-dark" : "main bg-light"}>
             <div className="header">
                 {!editUser ? (
                     <h1>
                         {" "}
-                        Welcome back <br /> {firstName} {lastName}
+                        Welcome back <br /> {credentials.firstName}{" "}
+                        {credentials.lastName}
                     </h1>
                 ) : (
                     <h1 style={{ color: "black" }}>Welcome back</h1>
@@ -163,14 +181,14 @@ const Dashboard = () => {
                             type="text"
                             id="firstName"
                             name="firstName"
-                            placeholder={firstName}
+                            placeholder={credentials.firstName}
                             onChange={handleChange}
                         />
                         <input
                             type="text"
                             id="lastName"
                             name="lastName"
-                            placeholder={lastName}
+                            placeholder={credentials.lastName}
                             onChange={handleChange}
                         />
                     </div>
@@ -183,7 +201,7 @@ const Dashboard = () => {
                         <input
                             type="button"
                             value="Cancel"
-                            onClick={resetFields}
+                            onClick={handleCancel}
                         />
                     </div>
                 </form>

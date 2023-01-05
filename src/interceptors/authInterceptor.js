@@ -1,6 +1,6 @@
 import axios from 'axios'
+import { API_URL } from '../config';
 import { isValidToken } from '../utils/tokenControl';
-
 
 /**
  * Request interceptor : collect & control & get token from localStorage and add it in axios headers
@@ -8,15 +8,16 @@ import { isValidToken } from '../utils/tokenControl';
 export const myInterceptorRequest = axios.interceptors.request.use(
     function (config) {
         const token = localStorage.getItem("token")
-        if ((config.url !== "http://localhost:3001/api/v1/user/login/"
-            || config.url !== "http://localhost:3001/api/v1/user/signup")
-            && isValidToken(token)) {
+        if ((config.url !== `${API_URL}/user/login/`
+            || config.url !== `${API_URL}/user/signup/`)
+            && isValidToken()) {
             config.headers[ "Authorization" ] = "Bearer " + token;
         }
         return config;
     },
     function (error) {
         return Promise.reject(error);
+
     }
 );
 
@@ -25,12 +26,14 @@ export const myInterceptorRequest = axios.interceptors.request.use(
  */
 export const myInterceptorResponse = axios.interceptors.response.use(
     response => {
-        if (response.request.responseURL === "http://localhost:3001/api/v1/user/login/" && response.data.body.token) {
+        if (response.request.responseURL === `${API_URL}/user/login/` && response.data.body.token) {
             localStorage.setItem("token", response.data.body.token);
+            return {"token":response.data.body.token}
         }
-        return response;
+        return response.data.body
     },
     err => {
-        return Promise.reject(err);
+        return { "error": err.response.status}
     }
 );
+

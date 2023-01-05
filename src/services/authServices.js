@@ -1,10 +1,11 @@
 import { API_URL } from "../config";
 import axios from "axios";
+import { my401InterceptorResponse } from "../interceptors/401Interceptor";
 import {
     myInterceptorRequest,
     myInterceptorResponse,
 } from "../interceptors/authInterceptor";
-import { my401InterceptorResponse } from "../interceptors/401Interceptor";
+import { generateErrorMessage } from "../utils/toastMessages";
 
 //interceptors
 axios.interceptors.request.use(myInterceptorRequest);
@@ -27,11 +28,11 @@ axios.interceptors.response.use(my401InterceptorResponse);
         "updatedAt": "2022-12-12T13:41:53.406Z",
     }
 */
-export async function register(credentials) {
+export async function registerAPI (credentials) {
     try {
         const url = `${API_URL}/user/signup/`;
         const response = await axios.post(url, credentials);
-        return response.body;
+        return response;
     } catch (error) {
         return error.response.status;
     }
@@ -40,15 +41,15 @@ export async function register(credentials) {
 /**
  * API for Login
  * @param {Object} credentials { "firstName": "string", "lastName": "string"}
- * @return {string} token
+ * @return {Object} {"token":token} ou {"error":error}
  */
-export async function login(credentials) {
+export async function loginAPI (credentials) {
     try {
         const url = `${API_URL}/user/login/`;
         const response = await axios.post(url, credentials);
-        return response.data.body.token;
+        return response
     } catch (error) {
-        return error.request.status; //400 if bad credentials
+        return error.request.status
     }
 }
 
@@ -66,11 +67,11 @@ export async function login(credentials) {
     "id": "63973f1f5aad700cfc33ecdb"
     * }
     */
-export async function fetchProfile() {
+export async function fetchProfileAPI(token) {
     try {
         const url = `${API_URL}/user/profile`;
         const response = await axios.post(url);
-        return response.data.body;
+        return response;
     } catch (error) {
         return error.response.status;
     }
@@ -91,29 +92,22 @@ export async function fetchProfile() {
     "id": "63973f1f5aad700cfc33ecdb"
     * }
     */
-export async function updateProfile(credentials) {
+export async function updateProfileAPI (credentials) {
     try {
         const url = `${API_URL}/user/profile`;
         const response = await axios.put(url, credentials);
-        return response.data.body;
+        generateErrorMessage(response)
+        return response;
     } catch (error) {
         return error.response.status;
     }
 }
 
-/**
- * Remove token from localStorage when log out
- */
-const logout = () => {
-    localStorage.removeItem("token");
-};
-
 const authService = {
-    register,
-    login,
-    fetchProfile,
-    logout,
-    updateProfile,
+    registerAPI,
+    loginAPI,
+    fetchProfileAPI,
+    updateProfileAPI,
 };
 
 export default authService;

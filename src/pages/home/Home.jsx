@@ -1,37 +1,34 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import BankFeature from "../../components/bankFeature/BankFeature";
-import Spinner from "../../components/spinner/Spinner";
 import { isValidToken } from "../../utils/tokenControl";
 import { fetchProfile, reset } from "../../redux/auth/authSlice";
 import chatIcon from "./img/icon-chat.png";
 import moneyIcon from "./img/icon-money.png";
 import securityIcon from "./img/icon-security.png";
+import { fetchProfileAPI } from "../../services/authServices";
 
 const Home = () => {
 
     const dispatch = useDispatch()
-    const { isError, isLoading, message } = useSelector(
-        (state) => state.auth
-    );
 
     //control token validity expiration date
     useEffect(() => {
-
-        if (!isValidToken(localStorage.getItem("token"))) {
+        const token = isValidToken()
+        if (!token) {
+            localStorage.removeItem("token")
             dispatch(reset());
             return
         } 
-        dispatch(fetchProfile());
+        getUserProfile(token)
         
-    }, [dispatch]);
-
-    useEffect(() => {
-        //token invalid
-        if (message === 401 || isError) dispatch(reset());
-    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ dispatch ]);
     
-    if (isLoading) return <Spinner />
+    const getUserProfile = async (token) => {
+        const data = await fetchProfileAPI(token)
+        dispatch(fetchProfile(data))
+    }
 
     return (
         <main>

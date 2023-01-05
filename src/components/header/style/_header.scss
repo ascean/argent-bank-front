@@ -43,8 +43,9 @@
     display: flex;
     gap: 5px;
     align-items: center;
+    cursor: pointer;
 
-    .main-nav-item:hover {
+    .sign-label:hover {
         text-decoration: underline;
     }
 }

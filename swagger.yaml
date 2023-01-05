@@ -112,6 +112,40 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /user/{id}/accounts:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Accounts for specific user
+      description: API for specifi user accounts
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: id
+          type: string
+          description: user id
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          schema:
+             $ref: '#/definitions/AccountsResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Specified resource was not found 
+        '500':
+          description: Internal Server Error
   /accounts/{id}/transactions:
     get:
       security:
@@ -214,10 +248,10 @@ paths:
       produces:
         - application/json
       responses:
-        '200':
+        '204':
           description: Transactions updated successfully
           schema:
-             $ref: '#/definitions/InfosResponse'
+             $ref: '#/definitions/TransactionResponse'
         '400':
           description: Invalid Fields
         '401':
@@ -247,12 +281,12 @@ paths:
       produces:
         - application/json
       responses:
-        '200':
+        '204':
           description: Transaction deleted successfully
-        '400':
-          description: Invalid Fields
         '401':
           description: Unauthorized
+        '403':
+          description: Forbidden
         '404':
           description: Specified resource was not found 
         '500':
@@ -318,12 +352,30 @@ definitions:
     properties:
       type:
         type: string
-        example: Electronic
       category:
         type: string
-        example: Food
       notes:
         type: string
+  AccountsResponse:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 315456
+        label:
+          type: string
+          example: Argent Bank Checking (x8349)
+        description:
+          type: string
+          example: Available balance
+        amount:
+          type: number
+          example: 2082.79
+        currency:
+          type: string
+          example: $
   TransactionsResponse:
     type: array
     items:
@@ -353,37 +405,23 @@ definitions:
         notes:
           type: string
   TransactionResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 315456
-        date:
-          type: string
-          example: June 20th, 2020
-        description:
-          type: string
-          example: Balance
-        amount:
-          type: number
-          example: 5.50
-        currency:
-          type: string
-          example: $
-        type:
-          type: string
-          example: Electronic
-        category:
-          type: string
-          example: Food
-        notes:
-          type: string
-  InfosResponse:
     type: object
     properties:
       id:
         type: string
         example: 315456
+      date:
+        type: string
+        example: June 20th, 2020
+      description:
+        type: string
+        example: Balance
+      amount:
+        type: number
+        example: 5.50
+      currency:
+        type: string
+        example: $
       type:
         type: string
         example: Electronic
@@ -391,4 +429,4 @@ definitions:
         type: string
         example: Food
       notes:
-        type: string    
+        type: string

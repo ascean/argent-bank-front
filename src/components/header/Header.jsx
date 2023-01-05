@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout, reset } from "../../redux/auth/authSlice";
+import { reset } from "../../redux/auth/authSlice";
 import { noEdit } from "../../redux/edit/editSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,6 +9,8 @@ import {
     faSignInAlt,
     faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { isValidToken } from "../../utils/tokenControl";
+import { useEffect } from "react";
 
 /**
  * Component header navigation
@@ -17,18 +19,19 @@ import {
 const Header = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const user = useSelector((state) => state.auth.user);
+    const { firstName } = useSelector((state) => state.auth.user);
     const editMode = useSelector((state) => state.edit.editMode);
 
-    const gotToHome = () => {
-        if (editMode) {
-            dispatch(noEdit())
-            navigate("/")
+    useEffect(() => {
+        if (!isValidToken()) {
+            dispatch(reset());
         }
-    }
+        if (editMode) dispatch(noEdit());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [navigate]);
 
     const onLogout = () => {
-        dispatch(logout());
+        localStorage.removeItem("token");
         dispatch(reset());
         dispatch(noEdit());
         navigate("/");
@@ -36,42 +39,26 @@ const Header = () => {
 
     return (
         <div className="main-nav">
-            {editMode ? (
-                <div type="button" className="main-nav-logo" onClick={() => gotToHome()}>
-                    <img
-                        className="main-nav-logo-image"
-                        src="./img/argentBankLogo.png"
-                        alt="Argent Bank Logo"
-                    />
-                    <h1 className="sr-only">Argent Bank</h1>
-                </div>
-            ) : (
-                <Link to="/" className="main-nav-logo">
-                    <img
-                        className="main-nav-logo-image"
-                        src="./img/argentBankLogo.png"
-                        alt="Argent Bank Logo"
-                    />
-                    <h1 className="sr-only">Argent Bank</h1>
-                </Link>
-            )}
+            <div
+                type="button"
+                className="main-nav-logo"
+                onClick={ () => !editMode ? navigate("/") : null } >
+                <img className="main-nav-logo-image" src="./img/argentBankLogo.png" alt="Argent Bank Logo" />
+                <h1 className="sr-only">Argent Bank</h1>
+            </div>
 
-            {user ? (
+            { firstName && firstName !== "" ? (
                 <div className="main-nav-log">
                     {editMode ? (
-                        <div
-                            className="main-nav-item"
-                            disabled
-                            style={{ opacity: "0.7" }}
-                        >
+                        <div className="main-nav-item" disabled style={{ opacity: "0.7" }} >
                             <FontAwesomeIcon icon={faCircleUser} />
-                            <span className="sign-label">{user.firstName}</span>
+                            <span className="sign-label">{firstName}</span>
                         </div>
                     ) : (
-                        <Link to="/dashboard" className="main-nav-item">
+                        <div type="button" className="main-nav-item" onClick={() => navigate("/dashboard")} >
                             <FontAwesomeIcon icon={faCircleUser} />
-                            <span className="sign-label">{user.firstName}</span>
-                        </Link>
+                            <span className="sign-label">{firstName}</span>
+                        </div>
                     )}
                     <Link to="/" className="main-nav-item" onClick={onLogout}>
                         <FontAwesomeIcon icon={faSignOutAlt} />
@@ -82,11 +69,11 @@ const Header = () => {
                 <div className="main-nav-log">
                     <Link to="login" className="main-nav-item">
                         <FontAwesomeIcon icon={faCircleUser} />
-                        <span className="sign-label">Log In</span>
+                        <span className="sign-label">Sign In</span>
                     </Link>
                     <Link to="register" className="main-nav-item">
                         <FontAwesomeIcon icon={faSignInAlt} />
-                        <span className="sign-label">Register</span>
+                        <span className="sign-label">Sign Up</span>
                     </Link>
                 </div>
             )}

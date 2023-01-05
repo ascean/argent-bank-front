@@ -2,40 +2,33 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Spinner from "../../components/spinner/Spinner";
 import { login } from "../../redux/auth/authSlice";
 import { reset } from "../../redux/auth/authSlice";
 import { generateErrorMessage } from "../../utils/toastMessages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { loginAPI } from "../../services/authServices";
 
 const Login = () => {
 
     const [ credentials, setCredentials ] = useState({
-        email: "",
-        password: "",
+        email: "tony@stark.com",
+        password: "password123",
     });
     const { email, password } = credentials;
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { user, isError, isLoading, isSuccess, message } = useSelector(
+    const { token, error } = useSelector(
         (state) => state.auth
     );
-
     
     useEffect(() => {
-
-        if (message || isError) {
-            generateErrorMessage(message)
-        } else {
-            if (isSuccess || user) {
-                navigate("/dashboard");
-            }
-        }
+        if (error && error !== 401) generateErrorMessage(error)
+        if (token) navigate("/dashboard")
         dispatch(reset());
 
-    }, [ user, isError, isSuccess, message, dispatch, navigate ]);
+    }, [ dispatch, navigate, error, token ]);
 
     const handleChange = (e) => {
         setCredentials((prevState) => ({
@@ -51,18 +44,26 @@ const Login = () => {
             email:email.trim(),
             password:password.trim()
         };
-        dispatch(login(userData));
-    };
 
-    if (isLoading) {
-        return <Spinner />;
+        getUserLogin(userData)
+        //dispatch(login(userData));
+
+
+    };
+    const getUserLogin = async (userData) => {
+        const data = await loginAPI(userData)
+        dispatch(login(data))
     }
+
+    // if (isLoading) {
+    //     return <Spinner />;
+    // }
 
     return (
         <main className="main bg-dark">
             <section className="register-content">
                 <FontAwesomeIcon icon={ faCircleUser } size={"3x"} />
-                <h1>Log In</h1>
+                <h1>Sign In</h1>
 
                 <form onSubmit={handleSubmit}>
                     <div className="input-wrapper">
@@ -92,7 +93,7 @@ const Login = () => {
                         <label htmlFor="remember-me">Remember me</label>
                     </div>
                     <button type="submit" className="log-button">
-                        Login
+                        Sign In
                     </button>
                 </form>
             </section>
