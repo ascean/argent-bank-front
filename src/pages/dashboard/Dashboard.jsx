@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Account from "../../components/account/Account";
 import { isValidToken } from "../../utils/tokenControl";
 import { reset } from "../../redux/auth/authSlice";
-import { fetchProfile } from "../../redux/auth/authSlice";
+import { fetchProfile, updateProfile } from "../../redux/auth/authSlice";
 import { edit, noEdit } from "../../redux/edit/editSlice";
 import { generateWarningMessage } from "../../utils/toastMessages";
 import { fetchProfileAPI, updateProfileAPI } from "../../services/authServices";
@@ -22,9 +22,9 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (error === 401) dispatch(reset());
-
+        
         if (error) return;
-
+        
         setCredentials((prevState) => ({
             ...prevState,
             firstName: user.firstName,
@@ -32,17 +32,18 @@ const Dashboard = () => {
         }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [error, dispatch]);
-
+    
     //control token validity expiration date
     useEffect(() => {
         const token = isValidToken();
 
         if (!token) {
-            navigate("/login");
+            goToLogin()
             return;
         }
 
-        getUserProfile(token);
+        getUserProfile()
+        console.log(isValidToken());
         setCredentials((prevState) => ({
             ...prevState,
             firstName: user.firstName,
@@ -57,8 +58,9 @@ const Dashboard = () => {
      * @param {string} credentials.firstName new first name
      * @param {string} credentials.lastName new last name
      */
-    const updateProfile = async (credentials) => {
+    const updateUserProfile = async (credentials) => {
         const data = await updateProfileAPI(credentials);
+        console.log(data);
         dispatch(updateProfile(data));
     };
 
@@ -121,7 +123,7 @@ const Dashboard = () => {
             setCredentials((prevState) => ({ ...prevState, lastName: user.lastName }));
         }
 
-        updateProfile(credentials);
+        updateUserProfile(credentials);
         setEditUser(false);
         dispatch(noEdit());
         document.getElementById("firstName").value = "";

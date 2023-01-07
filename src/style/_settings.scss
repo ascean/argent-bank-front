@@ -1,9 +1,8 @@
-$color1:#00bc77;
-$color2-dark:#6458F5;
-$color2-light: #B3B3F0;
-$color3:#12002b;
-$color4:#e0e6ed;
-$color5:#B8C4CE;
+$color-green:#00bc77;
+$color-purple:#6458F5;
+$color-light-purple: #B3B3F0;
+$color-dark-purple:#12002b;
+$color-grey-light:#B8C4CE;
 
 html {
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -13,26 +12,33 @@ html {
     color: #2c3e50;
 }
 
-body, #root {
+body {
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+#root {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+main {
+    flex-grow:1;
+}
+
 a {
     cursor: pointer;
     text-decoration: none;
 }
-.main {
-    flex: 1;
-}
 
 .bg-dark {
-    background-color: $color3;//$color3;
+    background-color: $color-dark-purple;//$color-dark-purple;
 }
 .bg-light {
-    background-color: $color4;
+    background-color: #e0e6ed;
 }
 
 .sr-only {

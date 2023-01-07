@@ -3,7 +3,8 @@ import { API_URL } from '../config';
 import { isValidToken } from '../utils/tokenControl';
 
 /**
- * Request interceptor : collect & control & get token from localStorage and add it in axios headers
+ * Request interceptor : collect & control & get token in localStorage 
+ * Add token in axios headers for login and signup request
  */
 export const myInterceptorRequest = axios.interceptors.request.use(
     function (config) {
@@ -15,14 +16,14 @@ export const myInterceptorRequest = axios.interceptors.request.use(
         }
         return config;
     },
-    function (error) {
-        return Promise.reject(error);
+    function (err) {
+        return Promise.reject(err);
 
     }
 );
 
 /**
- * Response interceptor : add API token in local storage
+ * Response interceptor : add API token in local storage if login request
  */
 export const myInterceptorResponse = axios.interceptors.response.use(
     response => {

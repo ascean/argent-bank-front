@@ -1,6 +1,6 @@
 .edit-button {
-    border-color: $color1;
-    background-color: $color1;
+    border-color: $color-green;
+    background-color: $color-green;
     color: #fff;
     font-weight: bold;
     padding: 10px;
@@ -16,11 +16,11 @@ form {
         input {
             padding: 10px;
             outline: none;
-            border: 2px solid $color5;
+            border: 2px solid $color-grey-light;
             border-radius: 5px;
 
             &::placeholder {
-                color: $color5;
+                color: $color-grey-light;
             }
         }
     }
@@ -32,10 +32,10 @@ form {
 
         input {
             padding: 7px 20px;
-            border: 2px solid $color2-light;
+            border: 2px solid $color-light-purple;
             border-radius: 5px;
             background-color: white;
-            color: $color2-dark;
+            color: $color-purple;
             font-weight: bold;
             width: 120px;
             cursor: pointer;

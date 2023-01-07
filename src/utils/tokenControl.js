@@ -1,18 +1,18 @@
 import jwt from "jwt-decode";
 
 /**
- * Control token  + expiration date validity
+ * Control existence of a valid token
  * @returns boolean
  */
 export const isValidToken = () => {
     const token = localStorage.getItem("token")
-    if (token === null) return null
-    
+    if (!token) return false
+
     const decoded = jwt(token);
     if (!decoded.exp || Date.now() > decoded.exp * 1000) {
         localStorage.removeItem("token")
-        return null
+        return false
     }
 
-    return token;
+    return true;
 };

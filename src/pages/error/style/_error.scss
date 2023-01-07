@@ -1,5 +1,5 @@
 .error {
-    color:$color1;
+    color:$color-green;
     text-align: center;
     height: 78vh;
     display: flex;
@@ -20,7 +20,7 @@
     }
     
     & a {
-        color: $color1;
+        color: $color-green;
         padding-bottom: 60px;
         font-size: 18px;
         text-decoration: underline;

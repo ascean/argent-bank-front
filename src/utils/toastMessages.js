@@ -6,7 +6,7 @@ export const generateErrorMessage = (error) => {
             return toast.error("Wrong username and/or password", {autoClose:2000});
             
         case 401:
-            return toast.error("Unauthorized. Please log in", {autoClose:2000});
+            return toast.error("Unauthorized. Please sign in", {autoClose:2000});
             
         case 500:
             return toast.error("Internal Server Error", {autoClose:2000});

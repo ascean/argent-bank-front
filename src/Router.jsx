@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const Router = () => {
     return (
         <BrowserRouter>
+        <ToastContainer/>
             <Header />
             <Routes>
                 <Route path="/" element={<Home />} />
@@ -22,7 +23,6 @@ const Router = () => {
                 <Route path="*" element={<Error />} />
             </Routes>
             <Footer />
-            <ToastContainer/>
         </BrowserRouter>
     );
 };

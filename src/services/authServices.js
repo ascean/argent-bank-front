@@ -96,7 +96,6 @@ export async function updateProfileAPI (credentials) {
     try {
         const url = `${API_URL}/user/profile`;
         const response = await axios.put(url, credentials);
-        generateErrorMessage(response)
         return response;
     } catch (error) {
         return error.response.status;

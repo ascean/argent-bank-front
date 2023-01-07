@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,27 +8,36 @@ import { generateErrorMessage } from "../../utils/toastMessages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { loginAPI } from "../../services/authServices";
+import { toast } from "react-toastify";
+
+const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-F0-9._-]+\.[a-zA-Z]{2,6}$/;
 
 const Login = () => {
-
-    const [ credentials, setCredentials ] = useState({
+    const [credentials, setCredentials] = useState({
         email: "tony@stark.com",
         password: "password123",
     });
     const { email, password } = credentials;
+    const [validEmail, setValidEmail] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { token, error } = useSelector(
-        (state) => state.auth
-    );
-    
-    useEffect(() => {
-        if (error && error !== 401) generateErrorMessage(error)
-        if (token) navigate("/dashboard")
-        dispatch(reset());
+    const { token, error } = useSelector((state) => state.auth);
 
-    }, [ dispatch, navigate, error, token ]);
+    const emailRef = useRef();
+    const passwordRef = useRef();
+
+    useEffect(() => {
+        //check email
+        const result = EMAIL_REGEX.test(email);
+        setValidEmail(result);
+    }, [email]);
+
+    useEffect(() => {
+        if (error && error !== 401) generateErrorMessage(error);
+        if (token) navigate("/dashboard");
+        dispatch(reset());
+    }, [dispatch, navigate, error, token]);
 
     const handleChange = (e) => {
         setCredentials((prevState) => ({
@@ -38,31 +47,34 @@ const Login = () => {
     };
 
     const handleSubmit = (e) => {
-
         e.preventDefault();
+        if (!email || !validEmail) {
+            toast.error("Please enter a valid email address", { autoClose: 2000 })
+            emailRef.current.focus();
+            return
+        }
+        if (!password) {
+            toast.error("Please enter your password", { autoClose: 2000 })
+            passwordRef.current.focus();
+            return
+        }
         const userData = {
-            email:email.trim(),
-            password:password.trim()
+            email: email.trim(),
+            password: password.trim(),
         };
 
-        getUserLogin(userData)
+        getUserLogin(userData);
         //dispatch(login(userData));
-
-
     };
     const getUserLogin = async (userData) => {
-        const data = await loginAPI(userData)
-        dispatch(login(data))
-    }
-
-    // if (isLoading) {
-    //     return <Spinner />;
-    // }
+        const data = await loginAPI(userData);
+        dispatch(login(data));
+    };
 
     return (
         <main className="main bg-dark">
             <section className="register-content">
-                <FontAwesomeIcon icon={ faCircleUser } size={"3x"} />
+                <FontAwesomeIcon icon={faCircleUser} size={"3x"} />
                 <h1>Sign In</h1>
 
                 <form onSubmit={handleSubmit}>
@@ -73,9 +85,12 @@ const Login = () => {
                             id="email"
                             name="email"
                             value={email}
-                            required
+                            ref={emailRef}
+                            aria-invalid={validEmail ? "false" : "true"}
+                            aria-describedby="emailmsg"
                             onChange={handleChange}
                         />
+                        
                     </div>
                     <div className="input-wrapper">
                         <label htmlFor="password">Password</label>
@@ -84,8 +99,10 @@ const Login = () => {
                             id="password"
                             name="password"
                             value={password}
+                            ref={passwordRef}
+                            aria-invalid={password ? "false" : "true"}
+                            aria-describedby="passwordmsg"
                             onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="input-remember">

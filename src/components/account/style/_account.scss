@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid black;
+    border: 2px solid $color-grey-light;
     background-color: #fff;
     width: 80%;
     margin: 0 auto;
@@ -42,13 +42,13 @@
     font-size: 1em;
     font-weight: bold;
     margin-top: 1em;
-    border-color: $color1;
-    background-color: $color1;
+    border-color: $color-green;
+    background-color: $color-green;
     color: #fff;
 
     &.edit-mode {
-        border-color: $color2-dark;
-        background-color: $color2-dark;
+        border-color: $color-purple;
+        background-color: $color-purple;
     }
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { reset } from "../../redux/auth/authSlice";
+import { fetchProfile, reset } from "../../redux/auth/authSlice";
 import { noEdit } from "../../redux/edit/editSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,7 +28,7 @@ const Header = () => {
         }
         if (editMode) dispatch(noEdit());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [navigate]);
+    }, [ navigate ]);
 
     const onLogout = () => {
         localStorage.removeItem("token");

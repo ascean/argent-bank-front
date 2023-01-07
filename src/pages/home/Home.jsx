@@ -3,33 +3,29 @@ import { useDispatch } from "react-redux";
 import BankFeature from "../../components/bankFeature/BankFeature";
 import { isValidToken } from "../../utils/tokenControl";
 import { fetchProfile, reset } from "../../redux/auth/authSlice";
-import chatIcon from "./img/icon-chat.png";
-import moneyIcon from "./img/icon-money.png";
-import securityIcon from "./img/icon-security.png";
 import { fetchProfileAPI } from "../../services/authServices";
+import BANK_FEATURES from "../../assets/datas/datas";
 
 const Home = () => {
+    
+    const bankFeatures = BANK_FEATURES
 
     const dispatch = useDispatch()
 
-    //control token validity expiration date
     useEffect(() => {
-        const token = isValidToken()
-        if (!token) {
-            localStorage.removeItem("token")
+        if (!isValidToken()) {
             dispatch(reset());
             return
         } 
-        getUserProfile(token)
+        getUserProfile()
         
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ dispatch ]);
     
-    const getUserProfile = async (token) => {
-        const data = await fetchProfileAPI(token)
+    const getUserProfile = async () => {
+        const data = await fetchProfileAPI()
         dispatch(fetchProfile(data))
     }
-
+    
     return (
         <main>
             <div className="hero">
@@ -44,30 +40,16 @@ const Home = () => {
                 </section>
             </div>
             <section className="features">
-                <BankFeature
-                    icon={chatIcon}
-                    alt={"Chat Icon"}
-                    title={"You are our #1 priority"}
-                    content={
-                        "Need to talk to a representative? You can get in touch through our 24/7 chat or through a phone call in less than 5 minutes."
-                    }
-                />
-                <BankFeature
-                    icon={moneyIcon}
-                    alt={"Money Icon"}
-                    title={"More savings means higher rates"}
-                    content={
-                        "The more you save with us, the higher your interest rate will be!"
-                    }
-                />
-                <BankFeature
-                    icon={securityIcon}
-                    alt={"Security Icon"}
-                    title={"Security you can trust"}
-                    content={
-                        "We use top of the line encryption to make sure your data and money is always safe."
-                    }
-                />
+                { bankFeatures.map((bankFeature) => (
+                    <BankFeature
+                        key={ bankFeature.key }
+                        icon={bankFeature.icon}
+                        alt={ bankFeature.alt }
+                        title={ bankFeature.title }
+                        description={ bankFeature.description }
+                    />
+                    
+                ))}
             </section>
         </main>
     );

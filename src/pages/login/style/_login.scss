@@ -5,8 +5,8 @@
     font-size: 1.1em;
     font-weight: bold;
     margin-top: 1em;
-    border-color: $color1;
-    background-color: $color1;
+    border-color: $color-green;
+    background-color: $color-green;
     color: #fff;
     text-decoration: underline;
     text-decoration-thickness: 2px;
@@ -19,8 +19,8 @@
     }
 
     &.inactive {
-        border-color: $color5;
-        background-color: $color5;
+        border-color: $color-grey-light;
+        background-color: $color-grey-light;
     }
 }
 
@@ -63,6 +63,7 @@
 
     label {
         font-weight: bold;
+        margin-bottom: 4px;
     }
 
     input {
@@ -70,8 +71,8 @@
         font-size: 1.2em;
 
         &:focus-visible {
-            outline: 1px solid $color1;
-            border: 1px solid $color1;
+            outline: 1px solid $color-green;
+            border: 1px solid $color-green;
             border-radius: 2px;
         }
     }
@@ -102,7 +103,7 @@
 }
 
 .valid {
-    color: $color1;
+    color: $color-green;
     margin-left: 0.25em;
 }
 
