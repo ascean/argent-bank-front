@@ -5,12 +5,11 @@ import {
     myInterceptorRequest,
     myInterceptorResponse,
 } from "../interceptors/authInterceptor";
-import { generateErrorMessage } from "../utils/toastMessages";
 
 //interceptors
 axios.interceptors.request.use(myInterceptorRequest);
-axios.interceptors.response.use(myInterceptorResponse);
 axios.interceptors.response.use(my401InterceptorResponse);
+axios.interceptors.response.use(myInterceptorResponse);
 
 /**
  * API for signup

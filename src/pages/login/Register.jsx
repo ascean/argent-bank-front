@@ -23,11 +23,11 @@ const PWD_REGEX = /^[A-z0-9!@#$%]{6,23}$/;
 
 const Register = () => {
     const [credentials, setCredentials] = useState({
-        email: "toto@toto.fr",
-        password: "111111",
-        passwordConfirm: "111111",
-        firstName: "Toto",
-        lastName: "TOTO",
+        email: "",
+        password: "",
+        passwordConfirm: "",
+        firstName: "",
+        lastName: "",
     });
 
     const { email, password, passwordConfirm, firstName, lastName } =

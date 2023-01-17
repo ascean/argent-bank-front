@@ -14,8 +14,8 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-F0-9._-]+\.[a-zA-Z]{2,6}$/;
 
 const Login = () => {
     const [credentials, setCredentials] = useState({
-        email: "tony@stark.com",
-        password: "password123",
+        email: "",
+        password: "",
     });
     const { email, password } = credentials;
     const [validEmail, setValidEmail] = useState(false);

@@ -43,7 +43,7 @@ const Dashboard = () => {
         }
 
         getUserProfile()
-        console.log(isValidToken());
+
         setCredentials((prevState) => ({
             ...prevState,
             firstName: user.firstName,
@@ -60,7 +60,6 @@ const Dashboard = () => {
      */
     const updateUserProfile = async (credentials) => {
         const data = await updateProfileAPI(credentials);
-        console.log(data);
         dispatch(updateProfile(data));
     };
 
